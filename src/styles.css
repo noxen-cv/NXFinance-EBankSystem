@@ -754,7 +754,7 @@ body {
     width: 100%;
     background: #1E1E1E;
     color: white;
-    padding: 4rem 0;
+    padding: 2rem 0;
 }
 
 .footer-container {
@@ -763,24 +763,48 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    gap: 4rem;
+    gap: 1.5rem;
 }
 
 .footer-brand {
     flex: 1;
-    max-width: 300px;
+    max-width: 400px;
+    min-width: 350px;
+    
 }
 
 .footer-logo {
-    width: 180px;
+    width: 100px;
     height: auto;
-    margin-bottom: 1rem;
+    
+
+}
+
+.additional-logos {
+    display: flex;
+    align-items: left;
+    justify-content:space-evenly;
+    margin-bottom:2rem;
+}
+
+.additional-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo-separator {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 1rem;
 }
 
 .trademark-text {
     font-size: 0.9rem;
     color: #888;
     line-height: 1.5;
+    
 }
 
 .footer-links {
@@ -874,6 +898,15 @@ body {
     
     .footer-brand {
         max-width: 100%;
+    }
+
+    .additional-logos {
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    .additional-logo {
+        height: 32px;
     }
     
     .footer-links {

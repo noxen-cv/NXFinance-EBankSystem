@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NX Finance Admin Dashboard</title>
+    <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">
+    <link rel="stylesheet" href="../src/admin.css">    <!-- All styles moved to admin.css -->
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Chart.js for the circular progress -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">            <div class="logo-container">
+                <img src="./Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" class="logo">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i class="material-icons">dashboard</i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="material-icons">payment</i>
+                    <span>Repayment</span>
+                </a>
+                <div class="sub-menu">
+                    <a href="#" class="sub-item">Disbursed Loan</a>
+                    <a href="#" class="sub-item">Active Loan</a>
+                    <a href="#" class="sub-item">Overdue Loan Info</a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="user-info">
+                    <span class="hello">Hello,</span>
+                    <span class="username">Admin</span>
+                </div>
+                <div class="header-actions">
+                    <button class="search-btn">
+                        <i class="material-icons">search</i>
+                    </button>
+                    <button class="notification-btn">
+                        <i class="material-icons">notifications</i>
+                    </button>
+                    <button class="profile-btn">
+                        <i class="material-icons">person</i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Limits Section -->
+                <div class="limits-section">
+                    <div class="limit-card available">
+                        <div class="limit-icon">
+                            <i class="material-icons">account_balance_wallet</i>
+                        </div>
+                        <div class="limit-info">
+                            <h3>Available Limit</h3>
+                            <h2>₱6,500,000</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="limit-card remaining">
+                        <div class="limit-icon">
+                            <i class="material-icons">warning</i>
+                        </div>
+                        <div class="limit-info">
+                            <h3>Remaining Limit</h3>
+                            <h2>₱1,500,000</h2>
+                        </div>
+                    </div>
+
+                    <div class="loan-progress">
+                        <h3>Indicator Loan Health</h3>
+                        <canvas id="loanProgressChart"></canvas>
+                        <div class="progress-info">
+                            <span class="percentage">45%</span>
+                            <span class="detail">*45% out of 100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Used Limit Info -->
+                <div class="used-limit-section">
+                    <div class="section-header">
+                        <i class="material-icons">bar_chart</i>
+                        <h3>Used Limit Info</h3>
+                    </div>
+                    <div class="used-limit-amount">
+                        <h2>₱4,500,000</h2>
+                    </div>
+                </div>
+
+                <!-- Loan Table -->
+                <div class="loan-table-section">
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll"></th>
+                                <th>Account Name</th>
+                                <th>Loan Amount</th>
+                                <th>Payment Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loanTableBody">
+                            <!-- Table rows will be inserted by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../src/components/admin.js"></script>
+</body>
+</html>

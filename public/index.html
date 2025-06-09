@@ -21,7 +21,7 @@
                 <li><a href="#about">About Us</a></li>
             </ul>
             <div class="Button-container">
-                <a href="#login" class="login-btn">Login / Sign Up</a>
+                <a href="#" class="login-btn" id="loginBtn">Login / Sign Up</a>
             </div>
             
         </div>
@@ -176,5 +176,31 @@
         </div>
     </footer>
     <script src="../src/components/carousel.js"></script>
+    <script>
+// Smooth transition to login page on button click
+const loginBtn = document.getElementById('loginBtn');
+if (loginBtn) {
+    loginBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.style.transition = 'opacity 0.5s';
+        document.body.style.opacity = '0';
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 500);
+    });
+}
+// Add smooth transition for all Get Started buttons
+const getStartedBtns = document.querySelectorAll('.get-started-btn');
+getStartedBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.style.transition = 'opacity 0.5s';
+        document.body.style.opacity = '0';
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 500);
+    });
+});
+</script>
 </body>
 </html>

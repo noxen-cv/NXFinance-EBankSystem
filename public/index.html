@@ -17,8 +17,7 @@
             <ul class="nav-menu">
                 <li><a href="#features">Features</a></li>
                 <li><a href="#account">Account</a></li>
-                <li><a href="#investment">Investment</a></li>
-                <li><a href="#about">About Us</a></li>
+                <li><a href="#info">Security</a></li>
             </ul>
             <div class="Button-container">
                 <a href="#" class="login-btn" id="loginBtn">Login / Sign Up</a>
@@ -44,7 +43,9 @@
 
         </div>
     <img src="./Assets/Background 1.png" alt="Banking Background" class="background-img">
-    </section>    <section class="features-carousel">
+    </section>    
+    
+    <section class="features-carousel" id="features">
         <div class="carousel-container">
             <button class="carousel-nav prev" aria-label="Previous">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -80,7 +81,7 @@
                         <img src="./Assets/Loan.jpg" alt="Loan Feature">
                     </div>
                 </div>
-                <div class="carousel-card">
+                <div class="carousel-card" id="investment">
                     <h3>Investment</h3>
                     <p>Grow your wealth with smart investment opportunities.</p>
                     <div class="card-image">
@@ -91,7 +92,7 @@
         </div>    
     </section>
 
-    <section class="account-section">
+    <section class="account-section" id="account">
         <div class="account-container">
             <div class="account-content">
                 <h2 class="account-title">An account and<br>debit card in 5 minutes</h2>
@@ -99,13 +100,12 @@
                 <a href="#get-started" class="get-started-btn account-btn">Get Started</a>
             </div>
             <div class="account-image-wrapper">
-                <img src="./Assets/VECTOR LINES.PNG" alt="Vector Lines" class="vector-lines">
-                <img src="./Assets/Iphone Mockup.png" alt="iPhone Mockup" class="iphone-mockup">
+                <img src="./Assets/Banking.jpg" alt="Account Section Image" class="account-section-img" style="border-radius:24px;max-width:340px;width:100%;height:auto;box-shadow:0 4px 24px rgba(0,0,0,0.07);">
             </div>
         </div>
     </section>
 
-    <section class="info-section">
+    <section class="info-section" id="info">
         <div class="info-container">
             <div class="info-content">
                 <h2 class="info-title">Security you can trust</h2>
@@ -201,6 +201,27 @@ getStartedBtns.forEach(btn => {
         setTimeout(() => {
             window.location.href = 'login.html';
         }, 500);
+    });
+});
+// 1 second smooth scroll for nav-menu buttons
+function smoothScrollToId(id) {
+    const target = document.getElementById(id);
+    if (target) {
+        const y = target.getBoundingClientRect().top + window.pageYOffset - 40;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+}
+const navLinks = document.querySelectorAll('.nav-menu a[href^="#"]');
+navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href && href.startsWith('#')) {
+            const id = href.replace('#', '');
+            if (document.getElementById(id)) {
+                e.preventDefault();
+                setTimeout(() => smoothScrollToId(id), 0);
+            }
+        }
     });
 });
 </script>

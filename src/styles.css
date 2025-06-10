@@ -650,18 +650,29 @@ body {
     max-width: 95%;
 }
 
-.info-image-placeholder {
+.info-image {
     flex: 1 1 45%;
-    min-width: 340px;
-    min-height: 340px;
-    max-width: 420px;
-    max-height: 420px;
+    min-width: 180px;
+    min-height: 180px;
+    max-width: 320px;
+    max-height: 220px;
     background: #d6d6d6;
     border-radius: 0.5rem;
     margin-right: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+}
+
+.info-img-responsive {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 @media (max-width: 1100px) {
@@ -674,12 +685,12 @@ body {
         padding-left: 0.5rem;
         padding-bottom: 1.5rem;
     }
-    .info-image-placeholder {
+    .info-image {
         margin-right: 0;
-        min-width: 220px;
-        min-height: 220px;
-        max-width: 320px;
-        max-height: 320px;
+        min-width: 140px;
+        min-height: 140px;
+        max-width: 220px;
+        max-height: 180px;
         width: 100%;
     }
 }
@@ -702,11 +713,11 @@ body {
     .info-desc {
         font-size: 0.93rem;
     }
-    .info-image-placeholder {
-        min-width: 120px;
-        min-height: 120px;
-        max-width: 180px;
-        max-height: 180px;
+    .info-image {
+        min-width: 90px;
+        min-height: 90px;
+        max-width: 120px;
+        max-height: 90px;
         margin: 0 auto;
     }
 }
@@ -920,4 +931,55 @@ body {
         flex-direction: column;
         align-items: center;
     }
+}
+
+/* Responsive styles for index.html main layout */
+@media (max-width: 1200px) {
+  .hero-container, .account-container, .info-container, .register-container, .footer-container {
+    max-width: 98vw;
+    width: 98vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+  }
+}
+@media (max-width: 900px) {
+  .hero-container, .account-container, .info-container, .register-container, .footer-container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1.5rem !important;
+    padding: 1.2rem 0.5rem !important;
+    min-width: 0;
+    width: 100vw;
+    max-width: 100vw;
+  }
+  .hero-content, .account-content, .info-content {
+    width: 100% !important;
+    min-width: 0;
+    text-align: left;
+  }
+  .hero-image, .account-image-wrapper, .info-image {
+    width: 100% !important;
+    min-width: 0;
+    margin: 0 auto !important;
+    justify-content: center;
+  }
+}
+@media (max-width: 600px) {
+  .hero-title, .account-title, .info-title, .register-title {
+    font-size: 1.2rem !important;
+  }
+  .hero-container, .account-container, .info-container, .register-container, .footer-container {
+    padding: 0.5rem 0.1rem !important;
+    gap: 0.7rem !important;
+  }
+  .get-started-btn, .register-btn, .login-btn {
+    font-size: 0.95rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+  .info-image, .info-img-responsive {
+    min-width: 70px !important;
+    min-height: 70px !important;
+    max-width: 100px !important;
+    max-height: 100px !important;
+  }
 }

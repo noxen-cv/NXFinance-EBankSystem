@@ -2,7 +2,7 @@ const pool = require('../config/database');
 const bcrypt = require('bcryptjs');
 
 class User {
-    static createTable = async () => {
+    static async createTable() {
         const createTableQuery = `
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
@@ -28,8 +28,10 @@ class User {
     }
 
     static async findByCredentials(username, password) {
+        let client;
         try {
-            const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+            client = await pool.connect();
+            const result = await client.query('SELECT * FROM users WHERE username = $1', [username]);
             const user = result.rows[0];
             
             if (!user) {
@@ -39,12 +41,14 @@ class User {
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
                 return null;
-            }
-
-            return user;
+            }            return user;
         } catch (error) {
             console.error('Error finding user:', error);
             throw error;
+        } finally {
+            if (client) {
+                client.release();
+            }
         }
     }
 }

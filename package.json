@@ -2,9 +2,8 @@
   "name": "nxfinance-ebanksystem",
   "version": "1.0.0",
   "description": "NXFinance is a prototype e-banking system designed to simulate the basic functionalities of a digital banking platform. This project is currently under development and is intended for learning, experimentation, and demonstration purposes.",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/server.js",
     "dev": "nodemon server/server.js"
   },

@@ -780,13 +780,15 @@ body {
     flex: 1;
     max-width: 400px;
     min-width: 350px;
+    position: relative;
     
 }
 
 .footer-logo {
     width: 100px;
-    height: auto;
-    
+    height: auto; 
+    align-items: center;
+    justify-items: center;
 
 }
 

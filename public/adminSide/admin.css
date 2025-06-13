@@ -41,6 +41,7 @@ html, body {
     padding: 1.5rem;
     height: 100vh;
     overflow-y: auto;
+    transition: transform 0.3s ease, margin-left 0.3s ease;
 }
 
 .logo-container {
@@ -116,9 +117,10 @@ html, body {
 /* Header Styles */
 .dashboard-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 2rem;
+    gap: 1rem;
 }
 
 .user-info {
@@ -153,22 +155,82 @@ html, body {
     background: rgba(0, 0, 0, 0.05);
 }
 
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-toggle:hover {
+    background-color: #0077b3;
+    transform: scale(1.05);
+}
+
+.sidebar-toggle:active {
+    transform: scale(0.95);
+}
+
+.sidebar-toggle i {
+    font-size: 24px;
+    transition: transform 0.3s ease;
+}
+
+/* Rotated icon when sidebar is open */
+.sidebar.open ~ .main-content .sidebar-toggle i,
+.dashboard-container.sidebar-open .sidebar-toggle i {
+    transform: rotate(-180deg);
+}
+
 /* Limits Section */
 .limits-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
+    align-items: stretch;
+}
+
+.left-column {
+    height: auto;
+    display: flex;
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: 100%;
+    justify-content: space-between;
 }
 
 .limit-card {
     background: var(--white);
     padding: 1.5rem;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
 }
 
 .limit-icon {
@@ -180,17 +242,19 @@ html, body {
     justify-content: center;
     background: var(--primary-color);
     color: var(--white);
+    margin: 0 auto;
 }
 
-.limit-info h3 {
+.centered-content h3 {
     color: var(--text-light);
     font-size: 0.9rem;
-    margin-bottom: 0.5rem;
+    margin: 0.5rem 0;
 }
 
-.limit-info h2 {
+.centered-content h2 {
     color: var(--text-dark);
     font-size: 1.5rem;
+    margin: 0;
 }
 
 .loan-progress {
@@ -198,6 +262,18 @@ html, body {
     padding: 1.5rem;
     border-radius: 12px;
     text-align: center;
+    height: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.loan-progress canvas {
+    max-width: 280px;
+    max-height: 280px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .loan-progress h3 {
@@ -206,18 +282,25 @@ html, body {
 }
 
 .progress-info {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
 .percentage {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 600;
     color: var(--primary-color);
+    display: block;
 }
 
 .detail {
     color: var(--text-light);
     font-size: 0.9rem;
+    display: block;
 }
 
 /* Used Limit Section */
@@ -244,77 +327,186 @@ html, body {
     font-size: 2rem;
 }
 
-/* Loan Table */
-.loan-table-section {
+/* Tables Container Layout */
+.tables-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.table-section {
     background: var(--white);
-    padding: 1.5rem;
     border-radius: 12px;
-    overflow-x: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow: hidden;
 }
 
-.loan-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.loan-table th, .loan-table td {
-    padding: 1rem;
-    text-align: left;
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    padding: 1.25rem 1.5rem;
+    margin: 0;
     border-bottom: 1px solid #eee;
 }
 
-.loan-table th {
+.table-wrapper {
+    padding: 0;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    table-layout: fixed;
+}
+
+.data-table th, 
+.data-table td {
+    padding: 0.85rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.data-table th:first-child, 
+.data-table td:first-child {
+    width: 40px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    text-align: center;
+}
+
+.data-table input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.data-table th:last-child, 
+.data-table td:last-child {
+    width: 80px;
+}
+
+.data-table th:nth-child(2), .data-table td:nth-child(2) { /* Account Name */
+    width: 15%;
+}
+
+.data-table th:nth-child(3), .data-table td:nth-child(3) { /* Loan Amount */
+    width: 12%;
+}
+
+.data-table th:nth-child(4), .data-table td:nth-child(4) { /* Credit Card Type */
+    width: 15%;
+}
+
+.data-table th:nth-child(5), .data-table td:nth-child(5) { /* Payment Date */
+    width: 12%;
+}
+
+.data-table th:nth-child(6), .data-table td:nth-child(6) { /* Loan Purpose */
+    width: 18%;
+}
+
+.data-table th:nth-child(7), .data-table td:nth-child(7) { /* Status */
+    width: 12%;
+}
+
+.data-table tbody tr:hover {
+    background-color: rgba(0, 136, 204, 0.05);
+}
+
+.data-table th {
     font-weight: 600;
     color: var(--text-light);
 }
 
-.status-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 50px;
-    font-size: 0.85rem;
-}
-
-.status-lunas {
-    background: #e8f5e9;
-    color: #2e7d32;
-}
-
-.status-belum {
-    background: #ffebee;
-    color: #c62828;
-}
-
-.action-btn {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 500;
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .limits-section {
-        grid-template-columns: repeat(2, 1fr);
-    }
+/* Sidebar Backdrop */
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 @media (max-width: 768px) {
+    .sidebar.open ~ .sidebar-backdrop {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .dashboard-container {
+        grid-template-columns: 0fr 1fr;
+    }
+
     .sidebar {
         transform: translateX(-100%);
         position: fixed;
         z-index: 1000;
-        transition: transform 0.3s ease;
+        width: 250px;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .sidebar.active {
+    .sidebar.closed {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
         transform: translateX(0);
     }
 
     .main-content {
         margin-left: 0;
+        width: 100%;
     }
 
     .limits-section {
         grid-template-columns: 1fr;
+    }
+}
+
+/* For medium and large screens */
+@media (min-width: 769px) {
+    .dashboard-container.sidebar-closed {
+        grid-template-columns: 0fr 1fr;
+    }
+    
+    .dashboard-container.sidebar-closed .sidebar {
+        margin-left: -250px;
+        width: 0;
+    }
+    
+    .dashboard-container.sidebar-open {
+        grid-template-columns: var(--sidebar-width) 1fr;
+    }
+
+    .dashboard-container.sidebar-open .sidebar {
+        margin-left: 0;
+    }
+    
+    .dashboard-container {
+        transition: grid-template-columns 0.3s ease;
+    }
+}
+
+/* Responsive layout for larger screens */
+@media (min-width: 1200px) {
+    .tables-container {
+        grid-template-columns: 1fr 1fr;
     }
 }
 

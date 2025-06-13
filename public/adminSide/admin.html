@@ -12,6 +12,8 @@
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Sidebar Backdrop for Mobile -->
+        <div class="sidebar-backdrop"></div>
         <!-- Sidebar -->
         <aside class="sidebar">            <div class="logo-container">
                 <img src="./Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" class="logo">
@@ -20,102 +22,103 @@
                 <a href="#" class="nav-item active">
                     <i class="material-icons">dashboard</i>
                     <span>Dashboard</span>
+                </a>                <a href="#" class="nav-item">
+                    <i class="material-icons">payment</i>
+                    <span>Loan History</span>
                 </a>
                 <a href="#" class="nav-item">
-                    <i class="material-icons">payment</i>
-                    <span>Repayment</span>
+                    <i class="material-icons">person</i>
+                    <span>Admin Info</span>
                 </a>
-                <div class="sub-menu">
-                    <a href="#" class="sub-item">Disbursed Loan</a>
-                    <a href="#" class="sub-item">Active Loan</a>
-                    <a href="#" class="sub-item">Overdue Loan Info</a>
-                </div>
             </nav>
-        </aside>
-
-        <!-- Main Content -->
+        </aside>        <!-- Main Content -->
         <main class="main-content">
             <!-- Header -->
             <header class="dashboard-header">
+                <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
+                    <i class="material-icons">menu</i>
+                </button>
                 <div class="user-info">
                     <span class="hello">Hello,</span>
                     <span class="username">Admin</span>
                 </div>
-                <div class="header-actions">
-                    <button class="search-btn">
-                        <i class="material-icons">search</i>
-                    </button>
-                    <button class="notification-btn">
-                        <i class="material-icons">notifications</i>
-                    </button>
-                    <button class="profile-btn">
-                        <i class="material-icons">person</i>
-                    </button>
-                </div>
-            </header>
-
-            <!-- Dashboard Content -->
-            <div class="dashboard-content">
-                <!-- Limits Section -->
+            </header><!-- Dashboard Content -->
+            <div class="dashboard-content">                <!-- Limits Section -->
                 <div class="limits-section">
-                    <div class="limit-card available">
-                        <div class="limit-icon">
-                            <i class="material-icons">account_balance_wallet</i>
+                    <div class="left-column">
+                        <div class="loan-progress">
+                            <h3>Indicator Loan Health</h3>
+                            <canvas id="loanProgressChart"></canvas>                            <div class="progress-info">
+                                <div class="percentage">0%</div>
+                                <div class="detail">*0% out of 100%</div>
+                            </div>
                         </div>
-                        <div class="limit-info">
-                            <h3>Available Limit</h3>
-                            <h2>₱6,500,000</h2>
+                    </div>                    <div class="right-column">                        <div class="limit-card available">
+                            <div class="centered-content">
+                                <div class="limit-icon">
+                                    <i class="material-icons">account_balance_wallet</i>
+                                </div>
+                                <h3>Available Limit</h3>
+                                <h2>₱0</h2>
+                            </div>
+                        </div>                          <div class="limit-card remaining">
+                            <div class="centered-content">
+                                <div class="limit-icon">
+                                    <i class="material-icons">person</i>
+                                </div>
+                                <h3>Client Number</h3>
+                                <h2>0</h2>
+                            </div>
+                        </div>
+                    </div>                </div>
+                
+                <!-- Tables Container -->
+                <div class="tables-container">                    <!-- Loan Table -->
+                    <div class="table-section">
+                        <h3 class="section-title">Approved Request</h3>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAllLoan"></th>
+                                        <th>Account Name</th>
+                                        <th>Loan Amount</th>
+                                        <th>Credit Card Type</th>
+                                        <th>Payment Date</th>
+                                        <th>Loan Purpose</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="loanTableBody">
+                                    <!-- Table rows will be inserted by JavaScript -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    
-                    <div class="limit-card remaining">
-                        <div class="limit-icon">
-                            <i class="material-icons">warning</i>
+                      <!-- Credit Card Table -->
+                    <div class="table-section">
+                        <h3 class="section-title">Pending Request</h3>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAllCard"></th>
+                                        <th>Account Name</th>
+                                        <th>Loan Amount</th>
+                                        <th>Credit Card Type</th>
+                                        <th>Payment Date</th>
+                                        <th>Loan Purpose</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cardTableBody">
+                                    <!-- Table rows will be inserted by JavaScript -->
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="limit-info">
-                            <h3>Remaining Limit</h3>
-                            <h2>₱1,500,000</h2>
-                        </div>
                     </div>
-
-                    <div class="loan-progress">
-                        <h3>Indicator Loan Health</h3>
-                        <canvas id="loanProgressChart"></canvas>
-                        <div class="progress-info">
-                            <span class="percentage">45%</span>
-                            <span class="detail">*45% out of 100%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Used Limit Info -->
-                <div class="used-limit-section">
-                    <div class="section-header">
-                        <i class="material-icons">bar_chart</i>
-                        <h3>Used Limit Info</h3>
-                    </div>
-                    <div class="used-limit-amount">
-                        <h2>₱4,500,000</h2>
-                    </div>
-                </div>
-
-                <!-- Loan Table -->
-                <div class="loan-table-section">
-                    <table class="loan-table">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAll"></th>
-                                <th>Account Name</th>
-                                <th>Loan Amount</th>
-                                <th>Payment Date</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="loanTableBody">
-                            <!-- Table rows will be inserted by JavaScript -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </main>

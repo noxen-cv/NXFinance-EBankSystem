@@ -1,0 +1,28 @@
+/* Base Animation Styles */
+[data-animate] {
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+/* Stagger container */
+.stagger-children > * {
+    opacity: 0;
+}
+
+/* Optional animation modifiers */
+[data-animate="up"] { transform: translateY(50px); }
+[data-animate="down"] { transform: translateY(-50px); }
+[data-animate="left"] { transform: translateX(-50px); }
+[data-animate="right"] { transform: translateX(50px); }
+[data-animate="scale"] { transform: scale(0.8); }
+
+/* Animation utilities */
+.animate-faster { animation-duration: 500ms !important; }
+.animate-slower { animation-duration: 1000ms !important; }
+.animate-once { animation-iteration-count: 1 !important; }
+
+/* Ensure smooth animations */
+* {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}

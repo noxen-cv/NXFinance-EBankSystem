@@ -146,6 +146,18 @@ body {
     margin-top: 30rem;
 }
 
+.account-btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background: rgb(234, 234, 234);
+    color: black;
+    text-decoration: none;
+    border: none;
+    border-radius: 35px;
+    transition: all 0.3s ease;
+    margin-top: 30rem;
+}
+
 .get-started-btn:hover {
     background: black;
     color: white;

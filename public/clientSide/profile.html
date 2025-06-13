@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - NX Finance</title>
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo-container">
+            <img src="../Assets/NX Finance Logo Transparent Black.png" alt="NX Finance Logo" class="logo">
+        </div>
+        <ul class="nav-links">
+            </li>
+            <li>
+                <a href="dashboard.html"><i class="fas fa-th-large"></i></a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="transactions.html"><i class="fas fa-exchange-alt"></i></a>
+                <span class="tooltip">Transactions</span>
+            </li>
+            <li>
+                <a href="profile.html"><i class="fas fa-user"></i></a>
+                <span class="tooltip">Profile</span>
+            </li>
+        </ul>
+        <div class="profile-preview">
+            <img src="https://ui-avatars.com/api/?name=User&background=random" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Hamburger Menu -->
+    <button class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="profile-header">
+            <h1>Profile Information</h1>
+            <div class="last-updated">
+                Last Updated: <span id="lastUpdated"></span>
+            </div>
+        </header>
+
+        <div class="profile-container">
+            <div class="profile-card fade-in">
+                <div class="profile-image-container">
+                    <img id="profileImage" src="https://ui-avatars.com/api/?name=User&size=200" alt="Profile Picture" class="profile-image">
+                    <div class="image-upload">
+                        <label for="uploadImage" class="upload-btn">
+                            <i class="fas fa-camera"></i>
+                        </label>
+                        <input type="file" id="uploadImage" accept="image/*" hidden>
+                    </div>
+                </div>
+
+                <div class="profile-details">
+                    <div class="detail-group">
+                        <label>Account Number</label>
+                        <p id="accountNumber" class="detail-value"></p>
+                    </div>
+                    <div class="detail-group">
+                        <label>First Name</label>
+                        <p id="firstName" class="detail-value"></p>
+                    </div>
+                    <div class="detail-group">
+                        <label>Last Name</label>
+                        <p id="lastName" class="detail-value"></p>
+                    </div>
+                    <div class="detail-group">
+                        <label>Age</label>
+                        <p id="age" class="detail-value"></p>
+                    </div>
+                    <div class="detail-group">
+                        <label>Card Type</label>
+                        <p id="cardType" class="detail-value"></p>
+                    </div>
+                    <div class="detail-group">
+                        <label>Member Since</label>
+                        <p id="memberSince" class="detail-value"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons fade-in">
+                <button id="updateInfoBtn" class="action-btn update">
+                    <i class="fas fa-user-edit"></i>
+                    Update Information
+                </button>
+                <button id="updateCardTypeBtn" class="action-btn upgrade">
+                    <i class="fas fa-arrow-up"></i>
+                    Update Card Type
+                </button>
+                <button id="updateCardNumberBtn" class="action-btn card">
+                    <i class="fas fa-credit-card"></i>
+                    Update Card Number
+                </button>
+                <button id="reportCardBtn" class="action-btn report">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Report Lost/Stolen Card
+                </button>
+                <button id="deleteAccountBtn" class="action-btn delete">
+                    <i class="fas fa-user-times"></i>
+                    Delete Account
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

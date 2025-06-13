@@ -1,0 +1,35 @@
+/* Default state - Desktop */
+.Button-container {
+    display: flex;
+}
+
+.nav-menu .login-btn {
+    display: none;
+}
+
+/* Mobile state */
+@media (max-width: 768px) {
+    .Button-container {
+        display: none !important;
+    }
+
+    .nav-menu .login-btn {
+        display: block !important;
+    }
+}
+
+/* Ensure proper button styling */
+.login-btn {
+    padding: 0.8rem 1.5rem;
+    background-color: #555555;
+    color: white;
+    border-radius: 24px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.login-btn:hover {
+    background-color: #000000;
+    transform: translateY(-2px);
+}

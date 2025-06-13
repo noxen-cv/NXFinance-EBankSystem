@@ -1,0 +1,55 @@
+/* Hero Section Responsive Styles */
+@media (max-width: 1024px) {
+    .hero-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .hero-title, 
+    .hero-subtitle, 
+    .hero-text {
+        width: 100%;
+        text-align: center;
+    }
+
+    .get-started-btn {
+        margin: 2rem auto;
+    }
+}
+
+/* Register Section Responsive Styles */
+.register-container {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.register-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.register-btn {
+    margin: 0 auto;
+    display: inline-block;
+}
+
+@media (max-width: 768px) {
+    .register-container {
+        padding: 3rem 1rem;
+    }
+
+    .register-title {
+        font-size: 1.8rem;
+    }
+}

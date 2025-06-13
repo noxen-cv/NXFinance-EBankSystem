@@ -1,0 +1,147 @@
+/* Hamburger Menu Styles */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1000;
+}
+
+.hamburger span {
+    width: 100%;
+    height: 2px;
+    background-color: #333;
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Navigation Menu Styles */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        display: none;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-20px);
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+        z-index: 999;
+    }    .Button-container {
+        display: none !important;
+    }
+
+    .nav-menu .login-btn {
+        display: block !important; /* Show login button in nav menu on mobile */
+        width: 100%;
+        padding: 0.8rem;
+        margin-top: 1rem;
+        text-align: center;
+        background-color: #4A90E2;
+        color: white;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .nav-menu .login-btn:hover {
+        background-color: #202020;
+        transform: translateY(-2px);
+    }
+
+    .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .nav-menu li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-menu a {
+        display: block;
+        padding: 0.8rem;
+        width: 100%;
+        font-size: 1.1rem;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+        background: rgba(74, 144, 226, 0.1);
+        color: #4A90E2;
+        transform: translateX(5px);
+    }
+
+    .Button-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+
+    .login-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Desktop Navigation Hover Effect */
+@media (min-width: 769px) {
+    .nav-menu {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .nav-menu a {
+        position: relative;
+        padding: 0.5rem 0;
+    }
+
+    .nav-menu .login-btn {
+        display: none; /* Hide login button in nav menu on desktop */
+    }
+
+    .nav-menu a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #4A90E2;
+        transition: width 0.3s ease-in-out;
+    }
+
+    .nav-menu a:not(.login-btn):hover::after {
+        width: 100%;
+    }
+}

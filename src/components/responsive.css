@@ -1,0 +1,126 @@
+/* Global responsive styles */
+@media (max-width: 1024px) {
+    .hero-container,
+    .features-carousel,
+    .account-container,
+    .info-container,
+    .register-container {
+        text-align: center;
+    }
+
+    .hero-content {
+        margin: 0 auto;
+        max-width: 600px;
+    }
+
+    .hero-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .features-carousel .carousel-card {
+        text-align: center;
+    }
+
+    .info-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .info-content {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .info-image {
+        margin-top: 2rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .info-image img {
+        max-width: 500px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.8rem;
+    }
+
+    .hero-text {
+        font-size: 1.1rem;
+    }
+
+    .info-content h2 {
+        font-size: 2rem;
+    }
+
+    .register-section h2 {
+        font-size: 2rem;
+    }
+
+    .footer-container {
+        text-align: center;
+    }
+
+    .footer-brand,
+    .footer-links,
+    .footer-github {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .footer-links {
+        gap: 2rem;
+    }
+
+    .links-group {
+        text-align: center;
+        width: 100%;
+    }
+
+    .links-group ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .additional-logos {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.5rem;
+    }
+
+    .hero-text {
+        font-size: 1rem;
+    }
+
+    .info-content h2 {
+        font-size: 1.8rem;
+    }
+
+    .register-section h2 {
+        font-size: 1.8rem;
+    }
+
+    .nav-container {
+        padding: 1rem;
+    }
+}

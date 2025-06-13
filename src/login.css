@@ -290,7 +290,7 @@ input[type="password"]:focus {
     outline: none;
     border-color: #4f63d2;
     background: white;
-    box-shadow: 0 0 0 3px rgba(79, 99, 210, 0.1);
+    box-shadow: 0 0 0 3px #4f63d21a;
 }
 
 .password-container {

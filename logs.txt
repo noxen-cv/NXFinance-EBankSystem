@@ -29,3 +29,10 @@ onlineLimitCurrent/Total
 incomeAmount
 holdAmount
 expenseAmount
+
+
+
+
+Refernce:
+Custoemr dashvboard
+https://i.pinimg.com/originals/81/63/f2/8163f2572e9ff61e0e24acb868e3bec8.png

@@ -105,7 +105,7 @@
                 <h2 class="account-title">Manage Accounts<br>and Loans in Minutes</h2>
                 <p class="account-desc">NX Finance equips employees and administrators with the tools to run smarter banking operations. All from a single dashboard.
                     <br><span class="note">*Employee tools available via admin dashboard</span></p>
-                <a href="#get-started" class="get-started-btn account-btn">Log-In as Admin</a>
+                <a href="adminlogin.html" class="account-btn">Log-In as Admin</a>
             </div>            <div class="account-image-wrapper">
                 <div style="position:relative;border-radius:24px;max-width:500px;width:100%;height:400px;box-shadow:4px 9px 24px rgba(21, 21, 21, 0.07);background:linear-gradient(145deg, rgba(245,247,250,0.95), rgba(245,247,250,0.85));">
                     <div id="particle-container" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:24px;overflow:hidden;"></div>
@@ -217,10 +217,22 @@
                 setTimeout(() => {
                     window.location.href = 'login.html';
                 }, 500);
-            });
+            });        
         }
         // Add smooth transition for all Get Started buttons
-        const getStartedBtns = document.querySelectorAll('.get-started-btn');
+        const accbtn = document.querySelectorAll('.account-btn');
+        accbtn.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.body.style.transition = 'opacity 0.5s';
+                document.body.style.opacity = '0';
+                setTimeout(() => {
+                    window.location.href = 'adminlogin.html';
+                }, 500);
+            });
+        });
+
+                const getStartedBtns = document.querySelectorAll('.accbtn');
         getStartedBtns.forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

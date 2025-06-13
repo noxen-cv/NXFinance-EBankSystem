@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NXFinance</title>
+    <link rel="stylesheet" href="../src/login.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <button class="back-arrow-btn" onclick="goToMain()" aria-label="Back to Main Page">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            </button>
+            <div class="logo">
+                <img src="./Assets/NX Finance Banner.svg" alt="NX Finance Logo" class="logo-img-nx">
+            </div>            
+            <div>
+                <h2 class="welcome-title">Manage Customer Accounts</h2>
+                <p class="welcome-subtitle">Log-in the credentials what your manager gave you.</p>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h2 class="login-title">Log-In as admin!</h2>
+            <p class="login-subtitle">Log in to access your account</p>            <form id="loginForm" onsubmit="handleLogin(event)" class="login-form">
+                <div id="loginError" class="error-message"></div>
+                <div class="form-group full-width">
+                    <input type="text" id="loginUsername" name="username" placeholder="Username" required>
+                </div>
+                <div class="form-group full-width">
+                    <div class="password-container">
+                        <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+                        <button type="button" class="password-toggle" onclick="toggleLoginPassword()">👁</button>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn">Log in</button>
+            </form>
+        </div>
+    </div>    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loader"></div>
+    </div>    <script>
+        async function handleLogin(event) {
+            event.preventDefault();
+            const form = event.target;
+            const loginButton = form.querySelector('.login-btn');
+            const errorDiv = document.getElementById('loginError');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const username = form.username.value;
+            const password = form.password.value;
+            
+            // Clear any existing error message
+            errorDiv.textContent = '';
+            errorDiv.classList.remove('visible');
+              try {
+                loginButton.classList.add('loading');
+                loadingOverlay.style.display = 'flex';
+                
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                let data;
+                try {
+                    const text = await response.text();
+                    if (!text) {
+                        throw new Error('Server returned empty response');
+                    }
+                    data = JSON.parse(text);
+                    console.log('Server response:', text);
+                } catch (parseError) {
+                    console.error('Failed to parse response:', parseError);
+                    loginButton.classList.remove('loading');
+                    loadingOverlay.style.display = 'none';
+                    throw new Error('Server returned invalid response. Please try again.');
+                }                if (!response.ok) {
+                    throw new Error(data.error || 'Invalid username or password');
+                }
+
+                // Handle login success
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                // Show success message and handle redirect
+                errorDiv.style.backgroundColor = '#e8f5e9';
+                errorDiv.style.color = '#2e7d32';
+                errorDiv.textContent = data.user.role === 'admin' ? 
+                    'Login successful! Redirecting to admin panel...' : 
+                    'Login successful! Redirecting...';
+                errorDiv.classList.add('visible');
+                
+                // Success animation and redirect
+                setTimeout(() => {
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        // Redirect based on user role
+                        window.location.href = data.user.role === 'admin' ? 'admin.html' : 'index.html';
+                    }, 500);
+                }, 1000);
+
+            } catch (error) {
+                errorDiv.style.backgroundColor = 'rgba(229, 62, 62, 0.1)';
+                errorDiv.style.color = '#e53e3e';
+                errorDiv.textContent = error.message;
+                errorDiv.classList.add('visible');
+            } finally {
+                loginButton.classList.remove('loading');
+                loadingOverlay.style.display = 'none';
+            }
+        }
+
+        async function handleSignup(event) {
+            event.preventDefault();
+            const signupButton = event.target.querySelector('.signup-btn');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            event.target.appendChild(errorDiv);
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            try {
+                signupButton.classList.add('loading');
+                loadingOverlay.style.display = 'flex';
+                
+                const formData = new FormData(event.target);
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: formData.get('username'),
+                        password: formData.get('password')
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Registration failed');
+                }
+
+                alert('Account created successfully! Please log in.');
+                window.location.reload();
+
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.add('visible');
+            } finally {
+                signupButton.classList.remove('loading');
+                loadingOverlay.style.display = 'none';
+            }
+        }
+
+        function toggleLoginPassword() {
+            const passwordInput = document.getElementById('loginPassword');
+            const toggleBtn = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁';
+            }
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁';
+            }
+        }
+
+        function goToMain() {
+            document.body.style.transition = 'opacity 0.5s';
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 500);
+        }
+
+        window.onload = function() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s';
+                document.body.style.opacity = '1';
+            }, 10);
+        };
+    </script>
+</body>
+</html>

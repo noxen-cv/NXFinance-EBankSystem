@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - NX Finance</title>
+    <link rel="stylesheet" href="transactions.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+     <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo-container">
+            <img src="../Assets/NX Finance Logo Transparent Black.png" alt="NX Finance Logo" class="logo">
+        </div>
+        <ul class="nav-links">
+            </li>
+            <li>
+                <a href="dashboard.html"><i class="fas fa-th-large"></i></a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="transactions.html"><i class="fas fa-exchange-alt"></i></a>
+                <span class="tooltip">Transactions</span>
+            </li>
+            <li>
+                <a href="profile.html"><i class="fas fa-user"></i></a>
+                <span class="tooltip">Profile</span>
+            </li>
+        </ul>
+        <div class="profile-preview">
+            <img src="https://ui-avatars.com/api/?name=User&background=random" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Hamburger Menu -->
+    <button class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="transactions-header">
+            <h1>Transaction History</h1>
+            <div class="filter-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchTransaction" placeholder="Search transactions...">
+                </div>
+                <div class="date-filter">
+                    <select id="dateFilter">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+                <div class="type-filter">
+                    <select id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="sent">Sent</option>
+                        <option value="received">Received</option>
+                        <option value="subscription">Subscription</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <div class="transactions-container fade-in">
+            <div class="transaction-summary">
+                <div class="summary-card income">
+                    <i class="fas fa-arrow-down"></i>
+                    <div class="summary-details">
+                        <span class="label">Total Received</span>
+                        <span class="amount" id="totalReceived"></span>
+                    </div>
+                </div>
+                <div class="summary-card expense">
+                    <i class="fas fa-arrow-up"></i>
+                    <div class="summary-details">
+                        <span class="label">Total Sent</span>
+                        <span class="amount" id="totalSent"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="transactions-table-container">
+                <table class="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Transaction ID</th>
+                            <th>Description</th>
+                            <th>Recipient/Sender</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsList">
+                        <!-- Transactions will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="load-more-container">
+                <button id="loadMoreBtn" class="load-more-btn">
+                    <i class="fas fa-sync-alt"></i>
+                    Load More Transactions
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

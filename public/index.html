@@ -6,6 +6,7 @@
     <title>NX Finance</title>  
     <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">    <link rel="stylesheet" href="../src/styles.css">
     <link rel="stylesheet" href="../src/components/animations.css">
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     
 </head>
 <body class="startup-animate">
@@ -97,11 +98,13 @@
                 <h2 class="account-title">An account and<br>debit card in 5 minutes</h2>
                 <p class="account-desc">Download the NX Financial App to get started, to fully utilize and experience the beauty of the banking app<br><span class="note">*Mobile App not in development</span></p>
                 <a href="#get-started" class="get-started-btn account-btn">Get Started</a>
-            </div>
-            <div class="account-image-wrapper">
-                <img src="./Assets/Banking.jpg" alt="Account Section Image" class="account-section-img" style="border-radius:24px;max-width:340px;width:100%;height:auto;box-shadow:0 4px 24px rgba(0,0,0,0.07);">
+            </div>            <div class="account-image-wrapper">
+                <div style="position:relative;border-radius:24px;max-width:880px;width:100%;height:400px;box-shadow:4px 9px 24px rgba(21, 21, 21, 0.07);background:transparent;">
+                    <div id="particle-container" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:24px;overflow:hidden;"></div>
+                </div>
             </div>
         </div>
+            <script src="../src/components/ParticleAnimation.js"></script>
     </section>
 
     <section class="info-section" id="info">
@@ -184,6 +187,7 @@
         </div>
     </footer>    <script src="../src/components/carousel.js"></script>
     <script src="../src/components/ScrollAnimations.js"></script>
+
     <script>
         // Initialize scroll animations when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
@@ -240,7 +244,6 @@
             });
         });
     </script>
-
 </script>
 </body>
 </html>

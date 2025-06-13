@@ -3,21 +3,21 @@ const bcrypt = require('bcryptjs');
 
 class User {
     static async createTable() {
-        const createTableQuery = `
-            CREATE TABLE IF NOT EXISTS users (
+        const createTableQuery = `            
+                CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
                 username VARCHAR(50) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL,
+                role VARCHAR(20) DEFAULT 'user',
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             )
         `;
         try {
             await pool.query(createTableQuery);
             // Insert default admin user if not exists
-            const hashedPassword = await bcrypt.hash('admin', 10);
-            const insertAdminQuery = `
-                INSERT INTO users (username, password)
-                VALUES ('admin', $1)
+            const hashedPassword = await bcrypt.hash('admin', 10);            const insertAdminQuery = `
+                INSERT INTO users (username, password, role)
+                VALUES ('admin', $1, 'admin')
                 ON CONFLICT (username) DO NOTHING
             `;
             await pool.query(insertAdminQuery, [hashedPassword]);

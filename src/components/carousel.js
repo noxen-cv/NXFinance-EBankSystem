@@ -51,16 +51,23 @@ if (track) {
 }
 
 // Navigation button functionality
-if (prevButton && nextButton) {    prevButton.addEventListener('click', () => {
+if (prevButton && nextButton && track) {
+    prevButton.addEventListener('click', () => {
+        const scrollAmount = -(cardWidth + gap);
         track.scrollBy({
-            left: -(cardWidth + gap),
+            left: scrollAmount,
             behavior: 'smooth'
         });
-    });nextButton.addEventListener('click', () => {
+        updateButtonVisibility();
+    });
+
+    nextButton.addEventListener('click', () => {
+        const scrollAmount = cardWidth + gap;
         track.scrollBy({
-            left: cardWidth + gap,
+            left: scrollAmount,
             behavior: 'smooth'
         });
+        updateButtonVisibility();
     });
 
     // Show/hide buttons based on scroll position

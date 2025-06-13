@@ -137,7 +137,7 @@ body {
 .get-started-btn {
     display: inline-block;
     padding: 0.8rem 1.5rem;
-    background: white;
+    background: rgb(234, 234, 234);
     color: black;
     text-decoration: none;
     border: none;
@@ -910,6 +910,7 @@ body {
     
     .footer-brand {
         max-width: 100%;
+
     }
 
     .additional-logos {

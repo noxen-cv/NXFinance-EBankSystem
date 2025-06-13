@@ -50,7 +50,8 @@ const authorize = (roles = []) => {
     };
 };
 
-module.exports = {
-    authenticate,
-    authorize
-};
+// Export authenticate as the default middleware for backward compatibility
+// and keep the named exports for specific use cases
+module.exports = authenticate;
+module.exports.authenticate = authenticate;
+module.exports.authorize = authorize;

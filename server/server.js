@@ -5,8 +5,18 @@ const session = require('express-session');
 require('dotenv').config();
 
 const app = express();
-const User = require('./models/user');
+
+// Import routes
 const authRoutes = require('./routes/auth');
+const customerRoutes = require('./routes/customer');
+const adminRoutes = require('./routes/admin');
+const accountRoutes = require('./routes/account');
+const transactionRoutes = require('./routes/transaction');
+const cardRoutes = require('./routes/card');
+const loanRoutes = require('./routes/loan');
+
+// Configure database migrations
+const { runMigrations } = require('./config/migrations');
 
 // Middleware
 app.use(cors());
@@ -30,7 +40,7 @@ app.use((err, req, res, next) => {
 // Initialize database and start server
 const initializeDatabase = async () => {
     try {
-        await User.createTable();
+        await runMigrations();
         console.log('Database tables initialized successfully');
     } catch (error) {
         console.error('Error initializing database:', error);
@@ -38,8 +48,14 @@ const initializeDatabase = async () => {
     }
 };
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/customers', customerRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/accounts', accountRoutes);
+app.use('/api/transactions', transactionRoutes);
+app.use('/api/cards', cardRoutes);
+app.use('/api/loans', loanRoutes);
 
 // Serve static files
 app.use(express.static('../public'));

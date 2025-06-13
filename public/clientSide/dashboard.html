@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Dashboard - NX Finance</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo-container">
+            <img src="../Assets/NX Finance Logo Transparent Black.png" alt="NX Finance Logo" class="logo">
+        </div>
+        <ul class="nav-links">
+            <li class="active">
+                <i class="fas fa-times close-menu"></i>
+            </li>
+            <li>
+                <a href="#dashboard"><i class="fas fa-th-large"></i></a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="#transactions"><i class="fas fa-exchange-alt"></i></a>
+                <span class="tooltip">Transactions</span>
+            </li>
+            <li>
+                <a href="#profile"><i class="fas fa-user"></i></a>
+                <span class="tooltip">Profile</span>
+            </li>
+        </ul>
+        <div class="profile-preview">
+            <img src="https://ui-avatars.com/api/?name=User&background=random" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Hamburger Menu -->
+    <button class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header Section -->
+        <header class="dashboard-header">            <div class="welcome-text">
+                <h1>Banking Dashboard</h1>
+                <p id="welcomeMessage"></p>
+            </div>
+            <div class="header-right">
+                <div class="current-balance">
+                    <span class="label">Current Balance</span>
+                    <span class="amount" id="totalBalance"></span>
+                </div>
+                <div class="notification-badge" id="notificationCount"></div>
+            </div>
+        </header>
+
+        <!-- Cards Section -->
+        <section class="balances-section">
+            <div class="section-header">
+                <h2>Card Type</h2>
+                <div class="navigation-controls">
+                    <button class="nav-btn prev"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button class="nav-btn next">Next <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+              <div class="cards-carousel" id="cardsContainer">
+                <!-- Cards will be dynamically populated here -->
+            </div>
+        </section>
+
+        <!-- Transactions Section -->
+        <section class="transactions-section">
+            <div class="section-header">
+                <h2>My Transactions</h2>
+                <a href="#" class="see-all">See All</a>
+            </div>
+
+            <div class="transaction-container">                <div class="transaction-list" id="transactionList">
+                    <!-- Transactions will be dynamically populated here -->
+                </div>
+
+                <!-- Send Money Section -->                <div class="send-money-section">
+                    <div class="recipients" id="recipientsList">
+                        <!-- Recipients will be dynamically populated here -->
+                    </div>
+
+                    <div class="amount-input">
+                        <input type="number" id="sendAmount" placeholder="Enter amount" />
+                        <select id="sendCurrency">
+                            <!-- Currency options will be dynamically populated -->
+                        </select>
+                    </div>
+
+                    <button class="send-money-btn" id="sendMoneyBtn">SEND MONEY</button>
+                </div>
+
+                <!-- Limits Section -->                <div class="limits-section">
+                    <div class="credit-limit">
+                        <h3>Credit Limit</h3>
+                        <div class="limit-amount">
+                            <span class="current" id="creditLimitCurrent"></span>
+                            <span class="total" id="creditLimitTotal"></span>
+                        </div>
+                    </div>
+
+                    <div class="online-limit">
+                        <h3>Online Limit</h3>
+                        <div class="limit-amount">
+                            <span class="current" id="onlineLimitCurrent"></span>
+                            <span class="total" id="onlineLimitTotal"></span>
+                        </div>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat-item income">
+                            <i class="fas fa-arrow-up"></i>
+                            <div class="stat-info">
+                                <span class="amount" id="incomeAmount"></span>
+                                <span class="label">Income</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-item hold">
+                            <i class="fas fa-pause"></i>
+                            <div class="stat-info">
+                                <span class="amount" id="holdAmount"></span>
+                                <span class="label">Hold</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-item expense">
+                            <i class="fas fa-arrow-down"></i>
+                            <div class="stat-info">
+                                <span class="amount" id="expenseAmount"></span>
+                                <span class="label">Expense</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

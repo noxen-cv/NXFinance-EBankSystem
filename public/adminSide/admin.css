@@ -1,0 +1,339 @@
+/* Admin Dashboard Styles */
+:root {
+    --primary-color: #0088cc;
+    --secondary-color: #f5f5f5;
+    --warning-color: #ff4444;
+    --success-color: #00C851;
+    --text-dark: #333;
+    --text-light: #666;
+    --white: #fff;
+    --sidebar-width: 250px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.dashboard-container {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background: var(--white);
+    border-right: 1px solid #eee;
+    padding: 1.5rem;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+}
+
+.logo {
+    width: 180px;
+    height: auto;
+    object-fit: contain;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    text-decoration: none;
+    color: var(--text-light);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover, .nav-item.active {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.nav-item i {
+    font-size: 1.2rem;
+}
+
+.sub-menu {
+    padding-left: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sub-item {
+    text-decoration: none;
+    color: var(--text-light);
+    padding: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.sub-item:hover {
+    color: var(--primary-color);
+}
+
+/* Main Content Styles */
+.main-content {
+    background: var(--secondary-color);
+    height: 100vh;
+    overflow-y: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-left: 0;
+}
+
+/* Header Styles */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.user-info {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.hello {
+    color: var(--text-light);
+}
+
+.username {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.header-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.header-actions button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Limits Section */
+.limits-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.limit-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.limit-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.limit-info h3 {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.limit-info h2 {
+    color: var(--text-dark);
+    font-size: 1.5rem;
+}
+
+.loan-progress {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.loan-progress h3 {
+    margin-bottom: 1rem;
+    color: var(--text-light);
+}
+
+.progress-info {
+    margin-top: 1rem;
+}
+
+.percentage {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.detail {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Used Limit Section */
+.used-limit-section {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.section-header i {
+    color: var(--primary-color);
+}
+
+.used-limit-amount h2 {
+    color: var(--text-dark);
+    font-size: 2rem;
+}
+
+/* Loan Table */
+.loan-table-section {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    overflow-x: auto;
+}
+
+.loan-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.loan-table th, .loan-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.loan-table th {
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+}
+
+.status-lunas {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-belum {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.action-btn {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .limits-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .limits-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.limit-card, .used-limit-section, .loan-table-section {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.limit-icon i {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}

@@ -1,0 +1,31 @@
+1. Welcome section:
+
+Added id="welcomeMessage" for the welcome message
+Added id="totalBalance" for the current balance
+Added id="notificationCount" for notifications
+Cards section:
+
+
+2. Card Section 
+Removed all hardcoded cards
+Added id="cardsContainer" for dynamic card population
+Transactions section:
+
+3. Transactions section:
+Removed all hardcoded transactions
+Added id="transactionList" for dynamic transaction population
+Send Money section:
+
+4. Send Money section:
+Removed hardcoded recipients
+Added id="recipientsList" for dynamic recipient population
+Added id="sendAmount" and id="sendCurrency" for form controls
+Added id="sendMoneyBtn" for the send button
+
+5. Limits section:
+Added IDs for all dynamic values:
+creditLimitCurrent/Total
+onlineLimitCurrent/Total
+incomeAmount
+holdAmount
+expenseAmount

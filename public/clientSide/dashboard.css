@@ -199,7 +199,7 @@ body {
 .nav-btn {
     background: none;
     border: none;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -478,7 +478,7 @@ body {
 
 .stat-info .label {
     font-size: 0.8rem;
-    color: var(--text-secondary);
+    color: var(--text-primary);
 }
 
 .stat-item.income i { color: var(--success-color); }

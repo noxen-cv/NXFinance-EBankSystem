@@ -30,4 +30,4 @@ This is a student/developer prototype. It is **not production-ready** and should
 ## 📌 How to Run
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/nxfinance-ebank.git
+   git clone https://github.com/noxen-cv/nxfinance-ebank.git

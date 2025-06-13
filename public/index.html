@@ -185,51 +185,62 @@
     </footer>    <script src="../src/components/carousel.js"></script>
     <script src="../src/components/ScrollAnimations.js"></script>
     <script>
-// Smooth transition to login page on button click
-const loginBtn = document.getElementById('loginBtn');
-if (loginBtn) {
-    loginBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.body.style.transition = 'opacity 0.5s';
-        document.body.style.opacity = '0';
-        setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 500);
-    });
-}
-// Add smooth transition for all Get Started buttons
-const getStartedBtns = document.querySelectorAll('.get-started-btn');
-getStartedBtns.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.body.style.transition = 'opacity 0.5s';
-        document.body.style.opacity = '0';
-        setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 500);
-    });
-});
-// 1 second smooth scroll for nav-menu buttons
-function smoothScrollToId(id) {
-    const target = document.getElementById(id);
-    if (target) {
-        const y = target.getBoundingClientRect().top + window.pageYOffset - 40;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-}
-const navLinks = document.querySelectorAll('.nav-menu a[href^="#"]');
-navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        if (href && href.startsWith('#')) {
-            const id = href.replace('#', '');
-            if (document.getElementById(id)) {
+        // Initialize scroll animations when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ScrollAnimations();
+        });
+
+        // Refresh animations on dynamic content changes
+        document.addEventListener('contentChanged', () => {
+            new ScrollAnimations();
+        });
+        // Smooth transition to login page on button click
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                setTimeout(() => smoothScrollToId(id), 0);
+                document.body.style.transition = 'opacity 0.5s';
+                document.body.style.opacity = '0';
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 500);
+            });
+        }
+        // Add smooth transition for all Get Started buttons
+        const getStartedBtns = document.querySelectorAll('.get-started-btn');
+        getStartedBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.body.style.transition = 'opacity 0.5s';
+                document.body.style.opacity = '0';
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 500);
+            });
+        });
+        // 1 second smooth scroll for nav-menu buttons
+        function smoothScrollToId(id) {
+            const target = document.getElementById(id);
+            if (target) {
+                const y = target.getBoundingClientRect().top + window.pageYOffset - 40;
+                window.scrollTo({ top: y, behavior: 'smooth' });
             }
         }
-    });
-});
+        const navLinks = document.querySelectorAll('.nav-menu a[href^="#"]');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    const id = href.replace('#', '');
+                    if (document.getElementById(id)) {
+                        e.preventDefault();
+                        setTimeout(() => smoothScrollToId(id), 0);
+                    }
+                }
+            });
+        });
+    </script>
+
 </script>
 </body>
 </html>

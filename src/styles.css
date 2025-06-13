@@ -768,12 +768,12 @@ body {
 }
 
 .footer-container {
-    width: 90%;
-    max-width: 1200px;
+    width: 100%;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    gap: 1.5rem;
+    
 }
 
 .footer-brand {

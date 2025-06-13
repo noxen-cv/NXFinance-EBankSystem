@@ -3,27 +3,32 @@
 <head>    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NX Finance</title>    <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">    
-    <link rel="stylesheet" href="../src/styles.css">
+    <title>NX Finance</title>    <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">      <link rel="stylesheet" href="../src/styles.css">
     <link rel="stylesheet" href="../src/components/animations.css">
     <link rel="stylesheet" href="../src/components/account-section.css">
     <link rel="stylesheet" href="../src/components/hero-register.css">
+    <link rel="stylesheet" href="../src/components/nav-menu.css">
+    <link rel="stylesheet" href="../src/components/button.css">
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     
 </head>
 <body class="startup-animate">
     <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">
+        <div class="nav-container">            <a href="/" class="logo">
                 <img src="./Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" height="40">
             </a>
-            <ul class="nav-menu">
+            <button class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>            <ul class="nav-menu">
                 <li><a href="#features">Features</a></li>
                 <li><a href="#account">Admin</a></li>
                 <li><a href="#info">Security</a></li>
+                <li><a href="#" class="login-btn" id="loginBtn">Login / Sign Up</a></li>
             </ul>
             <div class="Button-container">
-                <a href="#" class="login-btn" id="loginBtn">Login / Sign Up</a>
+                <a href="#" class="login-btn" id="loginBtnDesktop">Login / Sign Up</a>
             </div>
             
         </div>
@@ -190,6 +195,7 @@
         </div>
     </footer>    <script src="../src/components/carousel.js"></script>
     <script src="../src/components/ScrollAnimations.js"></script>
+    <script src="../src/components/NavMenu.js"></script>
 
     <script>
         // Initialize scroll animations when DOM is loaded

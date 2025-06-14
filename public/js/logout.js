@@ -7,10 +7,9 @@ function logout() {
     // Clear authentication data
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    
-    // Redirect to login page with message
+      // Redirect to login page with message
     sessionStorage.setItem('authError', 'You have been logged out successfully.');
-    window.location.href = '/login.html';
+    window.location.href = '../login.html';
 }
 
 // Export the logout function for use in other scripts

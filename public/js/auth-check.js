@@ -51,9 +51,8 @@
         if (message) {
             sessionStorage.setItem('authError', message);
         }
-        
-        // Redirect to login page
-        window.location.href = '/login.html';
+          // Redirect to login page
+        window.location.href = '../login.html';
     }
     
     // Check authentication when page loads

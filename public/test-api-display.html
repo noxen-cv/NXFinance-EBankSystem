@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Test Page</h1>
+    <h2>Testing connection to the admin API</h2>
+    <div id="status">Loading data...</div>
+    <h3>API Response:</h3>
+    <pre id="response">Waiting for response...</pre>
+    
+    <h3>Debug Info:</h3>
+    <div id="debug"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const statusDiv = document.getElementById('status');
+            const responseDiv = document.getElementById('response');
+            const debugDiv = document.getElementById('debug');
+            
+            try {
+                debugDiv.innerHTML += '<p>Starting API request...</p>';
+                const apiUrl = 'http://localhost:3200/api/admin/dashboard';
+                debugDiv.innerHTML += `<p>Fetching from: ${apiUrl}</p>`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                debugDiv.innerHTML += `<p>Response status: ${response.status} ${response.statusText}</p>`;
+                
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                
+                const data = await response.json();
+                debugDiv.innerHTML += '<p>Successfully parsed JSON response</p>';
+                
+                // Display the data
+                statusDiv.innerHTML = '<strong style="color:green">✓ Successfully connected to API</strong>';
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                
+                // Simple display of data in tables
+                let approvedHtml = '<h3>Approved Loans</h3><table border="1" style="border-collapse: collapse; width: 100%;">';
+                approvedHtml += '<tr><th>Name</th><th>Amount</th><th>Type</th><th>Status</th></tr>';
+                
+                data.approvedLoans.forEach(loan => {
+                    approvedHtml += `<tr>
+                        <td>${loan.name}</td>
+                        <td>₱${loan.amount.toLocaleString()}</td>
+                        <td>${loan.cardType}</td>
+                        <td>${loan.status}</td>
+                    </tr>`;
+                });
+                approvedHtml += '</table>';
+                
+                let pendingHtml = '<h3>Pending Loans</h3><table border="1" style="border-collapse: collapse; width: 100%;">';
+                pendingHtml += '<tr><th>Name</th><th>Amount</th><th>Type</th><th>Status</th></tr>';
+                
+                data.pendingLoans.forEach(loan => {
+                    pendingHtml += `<tr>
+                        <td>${loan.name}</td>
+                        <td>₱${loan.amount.toLocaleString()}</td>
+                        <td>${loan.cardType}</td>
+                        <td>${loan.status}</td>
+                    </tr>`;
+                });
+                pendingHtml += '</table>';
+                
+                document.body.innerHTML += approvedHtml + pendingHtml;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.innerHTML = `<strong class="error">✗ Error: ${error.message}</strong>`;
+                debugDiv.innerHTML += `<p class="error">Error occurred: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -2,8 +2,7 @@
 <html lang="en">
 <head>    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NX Finance Admin Dashboard</title>
-    <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">
+    <title>NX Finance Admin Dashboard</title>    <link rel="icon" href="../Assets/NX Finance Logo Transparent Black.png" type="image/png">
     <link rel="stylesheet" href="admin.css">    <!-- All styles moved to admin.css -->
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -11,14 +10,45 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Authentication check -->
     <script src="../js/auth-check.js"></script>
+    <style>
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 250px;
+            background: rgba(0,0,0,0.8);
+            color: #00ff00;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            z-index: 9999;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .debug-panel h3 {
+            margin-top: 0;
+            color: white;
+        }
+        .debug-panel .log {
+            margin-bottom: 5px;
+            font-size: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 3px;
+        }
+    </style>
 </head>
 <body>
+    <div class="debug-panel">
+        <h3>Debug Log</h3>
+        <div id="debug-log"></div>
+    </div>
+
     <div class="dashboard-container">
         <!-- Sidebar Backdrop for Mobile -->
         <div class="sidebar-backdrop"></div>
         <!-- Sidebar -->
         <aside class="sidebar">            <div class="logo-container">
-                <img src="./Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" class="logo">
+                <img src="../Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" class="logo">
             </div>
             <nav class="sidebar-nav">                <a href="admin.html" class="nav-item active">
                     <i class="material-icons">dashboard</i>

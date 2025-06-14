@@ -1,6 +1,5 @@
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
-// Test the registration API
 async function testRegister() {
     const userData = {
         username: `test_${Math.random().toString(36).substring(7)}`,

@@ -151,11 +151,16 @@ function generateLoan(userId, customerId, status, index) {
     // Calculate total amount with interest
     const totalAmount = monthlyPayment * term;
     
-    // For approved loans, set approval date
-    let approvedAt = null;
+    // For approved loans, set start date and end date
+    let startDate = null;
+    let endDate = null;
+    
     if (status === 'approved') {
-        approvedAt = new Date(createdAt);
-        approvedAt.setDate(approvedAt.getDate() + Math.floor(Math.random() * 5) + 1); // 1-5 days after creation
+        startDate = new Date(createdAt);
+        startDate.setDate(startDate.getDate() + Math.floor(Math.random() * 5) + 1); // 1-5 days after creation
+        
+        endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + term); // Term months after start date
     }
     
     // Purpose based on loan type
@@ -172,19 +177,17 @@ function generateLoan(userId, customerId, status, index) {
     
     // Return loan object
     return {
-        user_id: userId,
         customer_id: customerId,
-        loan_type: loanType.name,
+        loan_type_name: loanType.name,
         amount: amount,
         interest_rate: loanType.interest_rate,
-        term: term,
-        monthly_payment: Math.round(monthlyPayment * 100) / 100,
-        total_amount: Math.round(totalAmount * 100) / 100,
-        purpose: purpose,
+        term_months: term,
+        start_date: startDate,
+        end_date: endDate,
         status: status,
         created_at: createdAt,
-        approved_at: approvedAt,
-        // Add some identifying information to make loans distinguishable in the admin dashboard
+        updated_at: new Date(),
+        purpose: purpose,
         reference_number: `LOAN-${index.toString().padStart(4, '0')}`
     };
 }
@@ -267,6 +270,35 @@ async function insertSampleData() {
                 console.log(`Created loan type: ${loanType.name} with interest rate ${loanType.interest_rate}%`);
             }
         }
+          // Insert loan types first and get their IDs
+        const loanTypeIds = {};
+        for (const loanType of loanTypes) {
+            // Check if the loan type already exists
+            const existingType = await client.query(
+                'SELECT id FROM loan_types WHERE name = $1',
+                [loanType.name]
+            );
+            
+            let loanTypeId;
+            if (existingType.rows.length > 0) {
+                loanTypeId = existingType.rows[0].id;
+            } else {
+                // Insert the loan type
+                const result = await client.query(
+                    `INSERT INTO loan_types (name, interest_rate, min_amount, max_amount, min_term, max_term) 
+                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+                    [
+                        loanType.name, loanType.interest_rate, 
+                        loanType.min_amount, loanType.max_amount, 
+                        loanType.min_term, loanType.max_term
+                    ]
+                );
+                loanTypeId = result.rows[0].id;
+                console.log(`Created loan type: ${loanType.name} with interest rate ${loanType.interest_rate}%`);
+            }
+            
+            loanTypeIds[loanType.name] = loanTypeId;
+        }
         
         // Insert 5 approved loans
         console.log('\nCreating 5 approved loans...');
@@ -274,20 +306,29 @@ async function insertSampleData() {
             const customer = insertedCustomers[i];
             const loan = generateLoan(customer.userId, customer.customerId, 'approved', i + 1);
             
-            await client.query(
+            // Get loan type ID
+            const loanTypeId = loanTypeIds[loan.loan_type_name];
+            if (!loanTypeId) {
+                console.error(`Loan type ID not found for ${loan.loan_type_name}`);
+                continue;
+            }
+            
+            // Insert the loan
+            const result = await client.query(
                 `INSERT INTO loans (
-                    user_id, customer_id, loan_type, amount, interest_rate, term, 
-                    monthly_payment, total_amount, purpose, status, created_at, 
-                    approved_at, reference_number
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+                    customer_id, loan_type_id, amount, interest_rate, term_months, 
+                    start_date, end_date, status, created_at, updated_at
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
                 [
-                    loan.user_id, loan.customer_id, loan.loan_type, loan.amount,
-                    loan.interest_rate, loan.term, loan.monthly_payment, loan.total_amount,
-                    loan.purpose, loan.status, loan.created_at, loan.approved_at, loan.reference_number
+                    loan.customer_id, loanTypeId, loan.amount,
+                    loan.interest_rate, loan.term_months, loan.start_date,
+                    loan.end_date, loan.status, loan.created_at, loan.updated_at
                 ]
             );
             
-            console.log(`Created approved ${loan.loan_type} for ${customer.name}: ₱${loan.amount}, Reference: ${loan.reference_number}`);
+            const loanId = result.rows[0].id;
+            
+            console.log(`Created approved ${loan.loan_type_name} for ${customer.name}: ₱${loan.amount}, ID: ${loanId}`);
         }
         
         // Insert 5 pending loans
@@ -296,18 +337,27 @@ async function insertSampleData() {
             const customer = insertedCustomers[i];
             const loan = generateLoan(customer.userId, customer.customerId, 'pending', i + 1);
             
-            await client.query(
+            // Get loan type ID
+            const loanTypeId = loanTypeIds[loan.loan_type_name];
+            if (!loanTypeId) {
+                console.error(`Loan type ID not found for ${loan.loan_type_name}`);
+                continue;
+            }
+            
+            // Insert the loan
+            const result = await client.query(
                 `INSERT INTO loans (
-                    user_id, customer_id, loan_type, amount, interest_rate, term, 
-                    monthly_payment, total_amount, purpose, status, created_at, 
-                    approved_at, reference_number
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+                    customer_id, loan_type_id, amount, interest_rate, term_months, 
+                    start_date, end_date, status, created_at, updated_at
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
                 [
-                    loan.user_id, loan.customer_id, loan.loan_type, loan.amount,
-                    loan.interest_rate, loan.term, loan.monthly_payment, loan.total_amount,
-                    loan.purpose, loan.status, loan.created_at, loan.approved_at, loan.reference_number
+                    loan.customer_id, loanTypeId, loan.amount,
+                    loan.interest_rate, loan.term_months, loan.start_date,
+                    loan.end_date, loan.status, loan.created_at, loan.updated_at
                 ]
             );
+            
+            const loanId = result.rows[0].id;
             
             console.log(`Created pending ${loan.loan_type} for ${customer.name}: ₱${loan.amount}, Reference: ${loan.reference_number}`);
         }

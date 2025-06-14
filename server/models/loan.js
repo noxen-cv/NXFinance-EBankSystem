@@ -438,14 +438,17 @@ class Loan {
                 client.release();
             }
         }
-    }
-    
-    static async findByStatus(status) {
+    }    static async findByStatus(status) {
         let client;
         try {
             client = await pool.connect();
             const result = await client.query(
-                `SELECT loans.*, customers.first_name, customers.last_name, loan_types.name as loan_type_name 
+                `SELECT 
+                    loans.*,
+                    customers.first_name,
+                    customers.last_name, 
+                    loan_types.name as loan_type_name,
+                    loan_types.description as loan_type_description
                 FROM loans
                 JOIN customers ON loans.customer_id = customers.id
                 JOIN loan_types ON loans.loan_type_id = loan_types.id

@@ -45,7 +45,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Special CORS handling for registration endpoints
+// Special CORS handling for registration and login endpoints
 app.options('/api/auth/register', cors({ 
     origin: true,
     methods: ['POST'],
@@ -53,6 +53,12 @@ app.options('/api/auth/register', cors({
 }));
 
 app.options('/api/auth/register-direct', cors({ 
+    origin: true,
+    methods: ['POST'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.options('/api/auth/login-direct', cors({ 
     origin: true,
     methods: ['POST'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -84,10 +90,29 @@ const initializeDatabase = async () => {
     }
 };
 
-// Direct registration handlers (must come before router mounting)
+// Direct registration and login handlers (must come before router mounting)
 const { handleRegistration } = require('./direct-register');
-app.post('/api/auth/register', handleRegistration);
-app.post('/api/auth/register-direct', handleRegistration);
+const { handleLogin } = require('./direct-login');
+
+// Define direct handler routes with explicit CORS handling
+app.post('/api/auth/register', cors(), handleRegistration);
+app.post('/api/auth/register-direct', cors(), handleRegistration); 
+app.post('/api/auth/login', cors(), handleLogin);
+app.post('/api/auth/login-direct', cors(), handleLogin);
+
+// Handle OPTIONS preflight requests for these endpoints
+app.options('/api/auth/login', cors());
+app.options('/api/auth/login-direct', cors());
+
+// Special diagnostic endpoint
+app.get('/api/auth/test', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'API connection is working',
+        timestamp: new Date().toISOString(),
+        server: 'NXFinance API'
+    });
+});
 
 // API Routes (excluding registration which is handled above)
 app.use('/api/auth', authRoutes);
@@ -103,7 +128,8 @@ app.use((req, res, next) => {
     const allowedMethods = {
         '/api/auth/register': ['POST', 'OPTIONS'],
         '/api/auth/register-direct': ['POST', 'OPTIONS'],
-        '/api/auth/login': ['POST', 'OPTIONS']
+        '/api/auth/login': ['POST', 'OPTIONS'],
+        '/api/auth/login-direct': ['POST', 'OPTIONS']
     };
     
     const path = req.path;
@@ -162,13 +188,50 @@ app.use('/', express.static(path.join(__dirname, '../public'), {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error('Server error:', err);
+    console.error('[DEBUG] Server error:', err);
+    console.error('[DEBUG] Error stack:', err.stack);
+    
+    // Log request details for debugging
+    console.error('[DEBUG] Error occurred on request:');
+    console.error(`[DEBUG] - URL: ${req.method} ${req.originalUrl}`);
+    console.error(`[DEBUG] - IP: ${req.ip}`);
+    console.error('[DEBUG] - Headers:', JSON.stringify(req.headers));
+    
+    if (req.body) {
+        console.error('[DEBUG] - Body:', JSON.stringify(req.body, null, 2));
+    }
+    
+    // Determine appropriate error message and status code
+    let statusCode = err.status || 500;
+    let errorMessage = err.message || 'An unexpected error occurred';
+    
+    // Create more descriptive errors based on type
+    if (err.name === 'ValidationError') {
+        statusCode = 400;
+        errorMessage = 'Validation error: ' + err.message;
+    } else if (err.name === 'UnauthorizedError' || err.name === 'JsonWebTokenError') {
+        statusCode = 401;
+        errorMessage = 'Authentication error: ' + err.message;
+    } else if (err.code === 'EBADCSRFTOKEN') {
+        statusCode = 403;
+        errorMessage = 'CSRF verification failed';
+    } else if (err.code === '23505') {
+        // PostgreSQL unique violation
+        statusCode = 409;
+        errorMessage = 'This resource already exists'; 
+    }
     
     // Ensure we always return a properly formatted JSON response
-    res.status(err.status || 500).json({ 
-        error: err.message || 'Something broke!',
+    res.status(statusCode).json({ 
+        error: errorMessage,
         status: 'error',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        debug: process.env.NODE_ENV !== 'production' ? {
+            errorName: err.name,
+            errorCode: err.code,
+            path: req.path,
+            method: req.method
+        } : undefined
     });
 });
 

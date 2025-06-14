@@ -9,15 +9,49 @@ const router = express.Router();
 // Login route
 router.post('/login', async (req, res) => {
     try {
-        if (!req.body || !req.body.email || !req.body.password) {
-            return res.status(400).json({ error: 'Email and password are required' });
+        console.log('[DEBUG] Login route called');
+        console.log('[DEBUG] Request headers:', JSON.stringify(req.headers));
+        console.log('[DEBUG] Request body:', req.body ? JSON.stringify(req.body) : '(no body)');
+        
+        if (!req.body) {
+            console.log('[DEBUG] Request body is missing. Content-Type:', req.headers['content-type']);
+            return res.status(400).json({ 
+                error: 'Request body is missing',
+                debug: true,
+                headers: req.headers 
+            });
+        }
+        
+        if (!req.body.email || !req.body.password) {
+            console.log('[DEBUG] Missing required login fields');
+            return res.status(400).json({ 
+                error: 'Email and password are required',
+                fieldsReceived: Object.keys(req.body)
+            });
         }
 
         const { email, password } = req.body;
+        console.log('[DEBUG] Attempting to authenticate user with email:', email);
+        
+        // Check if this is an admin login
+        const isAdminLogin = req.headers.referer && req.headers.referer.includes('adminlogin');
+        console.log('[DEBUG] Is admin login attempt:', isAdminLogin);
+        
         const user = await User.findByEmailAndPassword(email, password);
         
         if (!user) {
+            console.log('[DEBUG] Authentication failed: invalid credentials for email:', email);
             return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        
+        console.log('[DEBUG] User authenticated successfully:', user.id, user.email, 'Role:', user.role);
+        
+        // For admin login, verify the user has admin role
+        if (isAdminLogin && user.role !== 'admin') {
+            console.log('[DEBUG] Non-admin user attempting to use admin login:', email);
+            return res.status(403).json({ 
+                error: 'Access denied. Admin privileges required.'
+            });
         }
 
         // Generate JWT token

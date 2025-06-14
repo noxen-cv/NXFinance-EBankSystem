@@ -55,31 +55,151 @@
             errorDiv.classList.remove('visible');
               try {
                 loginButton.classList.add('loading');
-                loadingOverlay.style.display = 'flex';
-                
-                const response = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
+                loadingOverlay.style.display = 'flex';                // Try the main login endpoint first
+                let response;
+                let debugInfo = {
+                    mainEndpoint: {
+                        attempted: false,
+                        status: null,
+                        error: null,
+                        responseText: null
                     },
-                    body: JSON.stringify({ email, password })
-                });
-
-                let data;
+                    fallbackEndpoint: {
+                        attempted: false,
+                        status: null,
+                        error: null,
+                        responseText: null
+                    }
+                };
+                
                 try {
-                    const text = await response.text();
+                    console.log('[DEBUG] Attempting login with email:', email);
+                    
+                    // First try main endpoint
+                    try {
+                        debugInfo.mainEndpoint.attempted = true;
+                        console.log('[DEBUG] Trying main login endpoint /api/auth/login');                        response = await fetch('http://localhost:3000/api/auth/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            credentials: 'include',
+                            body: JSON.stringify({ email, password })
+                        });
+                        
+                        debugInfo.mainEndpoint.status = response.status;
+                        console.log(`[DEBUG] Main login response status: ${response.status}`);
+                        
+                        // Capture response text for debugging
+                        const responseText = await response.text();
+                        debugInfo.mainEndpoint.responseText = responseText;
+                        console.log(`[DEBUG] Main login response text: ${responseText}`);
+                        
+                        // Reset the response for further processing
+                        response = new Response(responseText, {
+                            status: response.status,
+                            statusText: response.statusText,
+                            headers: response.headers
+                        });
+                        
+                        // If success, no need to try fallback
+                        if (response.ok) {
+                            console.log('[DEBUG] Main endpoint succeeded, not trying fallback');
+                        }
+                    } catch (mainError) {
+                        console.error('[DEBUG] Error with main endpoint:', mainError);
+                        debugInfo.mainEndpoint.error = mainError.message;
+                    }
+                    
+                    // Try fallback if main failed or returned non-2xx
+                    if (!response || !response.ok) {
+                        debugInfo.fallbackEndpoint.attempted = true;
+                        console.log('[DEBUG] Trying fallback login endpoint /api/auth/login-direct');
+                        
+                        try {                            response = await fetch('http://localhost:3000/api/auth/login-direct', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                credentials: 'include',
+                                body: JSON.stringify({ email, password })
+                            });
+                            
+                            debugInfo.fallbackEndpoint.status = response.status;
+                            console.log(`[DEBUG] Fallback login response status: ${response.status}`);
+                            
+                            // Capture response text for debugging
+                            const responseText = await response.text();
+                            debugInfo.fallbackEndpoint.responseText = responseText;
+                            console.log(`[DEBUG] Fallback login response text: ${responseText}`);
+                            
+                            // Reset the response for further processing
+                            response = new Response(responseText, {
+                                status: response.status,
+                                statusText: response.statusText,
+                                headers: response.headers
+                            });
+                        } catch (fallbackError) {
+                            console.error('[DEBUG] Error with fallback endpoint:', fallbackError);
+                            debugInfo.fallbackEndpoint.error = fallbackError.message;
+                        }
+                    }
+                    
+                    if (!response) {
+                        throw new Error('Both login endpoints failed to respond');
+                    }
+                    
+                } catch (fetchError) {
+                    console.error('[DEBUG] All login attempts failed:', fetchError, debugInfo);
+                    throw new Error(`Connection error: ${fetchError.message}. Check browser console for details.`);
+                }                let data;
+                try {
+                    // Skip text fetching as we already did it above
+                    const text = debugInfo.mainEndpoint.responseText || debugInfo.fallbackEndpoint.responseText || '';
+                    
                     if (!text) {
+                        console.error('[DEBUG] Empty response from server');
                         throw new Error('Server returned empty response');
                     }
-                    data = JSON.parse(text);
-                    console.log('Server response:', text);
+                    
+                    try {
+                        data = JSON.parse(text);
+                        console.log('[DEBUG] Successfully parsed JSON response:', data);
+                    } catch (jsonError) {
+                        console.error('[DEBUG] JSON Parse Error:', jsonError);
+                        console.error('[DEBUG] Raw response text:', text);
+                        
+                        // Try to extract any HTML error message that might be in the response
+                        let errorMsg = 'Server returned invalid response. Please try again.';
+                        
+                        if (text.includes('<title>') && text.includes('</title>')) {
+                            const titleMatch = text.match(/<title>(.*?)<\/title>/);
+                            if (titleMatch && titleMatch[1]) {
+                                errorMsg += ` Server error: ${titleMatch[1]}`;
+                            }
+                        }
+                        
+                        throw new Error(errorMsg);
+                    }
                 } catch (parseError) {
-                    console.error('Failed to parse response:', parseError);
+                    console.error('[DEBUG] Response processing error:', parseError);
                     loginButton.classList.remove('loading');
                     loadingOverlay.style.display = 'none';
-                    throw new Error('Server returned invalid response. Please try again.');
-                }                if (!response.ok) {
-                    throw new Error(data.error || 'Invalid username or password');
+                    
+                    // Detailed error with debug info
+                    const endpoints = [];
+                    if (debugInfo.mainEndpoint.attempted) {
+                        endpoints.push(`Main endpoint (${debugInfo.mainEndpoint.status})`);
+                    }
+                    if (debugInfo.fallbackEndpoint.attempted) {
+                        endpoints.push(`Fallback endpoint (${debugInfo.fallbackEndpoint.status})`);
+                    }
+                    
+                    throw new Error(`Error: ${parseError.message}\nAttempted endpoints: ${endpoints.join(', ')}\nCheck console for details.`);
+                }if (!response.ok) {
+                    throw new Error(data.error || 'Invalid email or password');
                 }
 
                 // Handle login success
@@ -188,10 +308,28 @@
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 500);
+        }        // Test API connection function
+        async function testApiConnection() {
+            try {
+                console.log('[DEBUG] Testing API connection...');
+                const response = await fetch('http://localhost:3000/api/auth/test');
+                const data = await response.json();
+                console.log('[DEBUG] API test successful:', data);
+                return true;
+            } catch (error) {
+                console.error('[DEBUG] API test failed:', error);
+                return false;
+            }
         }
-
-        window.onload = function() {
+        
+        window.onload = async function() {
             document.body.style.opacity = '0';
+            
+            // Test API connection on page load
+            const apiConnected = await testApiConnection();
+            console.log('[DEBUG] API connection status:', apiConnected ? 'Connected' : 'Failed');
+            
+            // Continue with page display
             setTimeout(() => {
                 document.body.style.transition = 'opacity 0.5s';
                 document.body.style.opacity = '1';

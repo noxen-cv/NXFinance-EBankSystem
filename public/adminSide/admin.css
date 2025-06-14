@@ -17,6 +17,16 @@
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* Page transition animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.main-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
 html, body {
     width: 100vw;
     height: 100vh;

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NX Finance - Admin Info</title>
+    <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-info.css">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Backdrop for Mobile -->
+        <div class="sidebar-backdrop"></div>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="./Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" class="logo">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin.html" class="nav-item">
+                    <i class="material-icons">dashboard</i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="loan-history.html" class="nav-item">
+                    <i class="material-icons">payment</i>
+                    <span>Loan History</span>
+                </a>
+                <a href="admin-info.html" class="nav-item active">
+                    <i class="material-icons">person</i>
+                    <span>Admin Info</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
+                    <i class="material-icons">menu</i>
+                </button>
+                <div class="user-info">
+                    <span class="hello">Hello,</span>
+                    <span class="username">Admin</span>
+                </div>
+            </header>
+
+            <!-- Admin Info Content -->
+            <div class="dashboard-content">
+                <div class="admin-profile-card">
+                    <div class="profile-header">                <div class="profile-image-container">
+                            <div class="profile-image-wrapper">
+                                <img id="adminProfileImage" src="../Assets/NX Finance Logo Transparent Black.png" alt="Admin Profile Image" class="profile-image">
+                                <div class="image-overlay">
+                                    <label for="imageUpload" class="upload-icon">
+                                        <i class="material-icons">photo_camera</i>
+                                    </label>
+                                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-info">
+                            <h1 id="lastName" class="admin-name">Last Name</h1>
+                            <h2 id="firstName" class="admin-title">First Name</h2>
+                        </div>
+
+                        <button id="editProfileBtn" class="edit-profile-btn">
+                            <i class="material-icons">edit</i>
+                            Edit Profile
+                        </button>
+                    </div>
+
+                    <div class="admin-details-container">
+                        <div class="admin-details">
+                            <h3>Account Information</h3>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <span class="detail-label">Email</span>
+                                    <span id="adminEmail" class="detail-value">admin@nxfinance.com</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Phone</span>
+                                    <span id="adminPhone" class="detail-value">+1 (555) 123-4567</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Role</span>
+                                    <span id="adminRole" class="detail-value">System Administrator</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Department</span>
+                                    <span id="adminDepartment" class="detail-value">Finance Operations</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Account Created</span>
+                                    <span id="adminJoined" class="detail-value">June 1, 2024</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Last Login</span>
+                                    <span id="lastLogin" class="detail-value">June 14, 2025</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-security-section">
+                        <h3>Security</h3>
+                        <div class="security-options">
+                            <button class="security-btn" id="changePasswordBtn">
+                                <i class="material-icons">lock</i>
+                                Change Password
+                            </button>
+                            <button class="security-btn" id="enable2FABtn">
+                                <i class="material-icons">security</i>
+                                Enable 2FA
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile Information</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="inputFirstName">First Name</label>
+                        <input type="text" id="inputFirstName" class="form-control" value="First Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputLastName">Last Name</label>
+                        <input type="text" id="inputLastName" class="form-control" value="Last Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">Email</label>
+                        <input type="email" id="inputEmail" class="form-control" value="admin@nxfinance.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPhone">Phone</label>
+                        <input type="tel" id="inputPhone" class="form-control" value="+1 (555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputDepartment">Department</label>
+                        <input type="text" id="inputDepartment" class="form-control" value="Finance Operations">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancelEdit" class="btn btn-cancel">Cancel</button>
+                        <button type="submit" class="btn btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Change Modal -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Change Password</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" class="form-control" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancelPasswordChange" class="btn btn-cancel">Cancel</button>
+                        <button type="submit" class="btn btn-save">Update Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>    <script src="admin-info.js"></script>
+</body>
+</html>

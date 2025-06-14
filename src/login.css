@@ -173,6 +173,21 @@ body {
     transform: translateY(0);
 }
 
+.new-user-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 .register-btn {
     background: transparent;
     border: 2px solid white;

@@ -1,0 +1,43 @@
+## NXFinance Registration Page Implementation
+
+This implementation adds a smooth transition from the login page to a registration page when the "Register Now" button is clicked.
+
+### Files Created:
+
+1. `public/register.html` - The HTML structure for the registration page
+2. `src/register.css` - Styling for the registration page
+3. `src/register.js` - JavaScript functionality for the registration page
+
+### Files Modified:
+
+1. `public/login.html` - Updated the "Register Now" button to transition to the registration page
+
+### Features:
+
+1. Smooth Transition: 
+   - Fade-out effect when transitioning between pages
+   - Slide-in animations for panels
+
+2. Registration Form:
+   - Name, Email, and Password fields
+   - Toggle password visibility
+   - Form validation and error handling
+   - Loading overlay for API calls
+
+3. Interactive Elements:
+   - Hoverable credit card image
+   - Back button to return to the login page
+   - Responsive design for various screen sizes
+
+4. Layout:
+   - Left panel: Registration form with white background
+   - Right panel: NX Finance branding, card image, and welcome text with dark background
+
+### How It Works:
+
+1. When a user clicks "Register Now" on the login page, the page fades out and transitions to the registration page
+2. The registration form validates user input and sends it to the server API
+3. Upon successful registration, the user is redirected back to the login page
+4. The interface is intuitive with clear instructions and visual feedback
+
+This implementation follows modern web design practices with smooth transitions and a user-friendly interface.

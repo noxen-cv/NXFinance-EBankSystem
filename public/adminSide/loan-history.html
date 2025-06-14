@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NX Finance - Loan History</title>
+    <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="loan-history.css">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Backdrop for Mobile -->
+        <div class="sidebar-backdrop"></div>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="./Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" class="logo">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin.html" class="nav-item">
+                    <i class="material-icons">dashboard</i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="loan-history.html" class="nav-item active">
+                    <i class="material-icons">payment</i>
+                    <span>Loan History</span>
+                </a>                <a href="admin-info.html" class="nav-item">
+                    <i class="material-icons">person</i>
+                    <span>Admin Info</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
+                    <i class="material-icons">menu</i>
+                </button>
+                <div class="user-info">
+                    <span class="hello">Hello,</span>
+                    <span class="username">Admin</span>
+                </div>
+            </header>
+
+            <!-- Loan History Content -->
+            <div class="dashboard-content">
+                <!-- Two-column layout for the top section -->
+                <div class="history-cards-container">
+                    <!-- First card -->
+                    <div class="history-card">
+                        <h3>Loan Summary</h3>
+                        <div class="card-content">
+                            <div class="summary-stat">
+                                <span class="stat-label">Total Loans</span>
+                                <span class="stat-value">124</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="stat-label">Active Loans</span>
+                                <span class="stat-value">87</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="stat-label">Total Value</span>
+                                <span class="stat-value">₱4,235,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Second card -->
+                    <div class="history-card">
+                        <h3>Repayment Status</h3>
+                        <div class="card-content">
+                            <div class="summary-stat">
+                                <span class="stat-label">On Time</span>
+                                <span class="stat-value">73%</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="stat-label">Late</span>
+                                <span class="stat-value">18%</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="stat-label">Defaulted</span>
+                                <span class="stat-value">9%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Large full-width table section -->
+                <div class="loan-history-section">
+                    <div class="table-section">
+                        <h3 class="section-title">Complete Loan History</h3>
+                        <div class="table-filters">
+                            <select id="statusFilter" class="filter-select">
+                                <option value="all">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="completed">Completed</option>
+                                <option value="defaulted">Defaulted</option>
+                            </select>
+                            <select id="dateFilter" class="filter-select">
+                                <option value="all">All Time</option>
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                            <div class="search-container">
+                                <input type="text" id="searchInput" placeholder="Search loans...">
+                                <button id="searchBtn"><i class="material-icons">search</i></button>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAllHistory"></th>
+                                        <th>Account Name</th>
+                                        <th>Loan ID</th>
+                                        <th>Loan Amount</th>
+                                        <th>Interest Rate</th>
+                                        <th>Term</th>
+                                        <th>Start Date</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="loanHistoryTableBody">
+                                    <!-- Table rows will be inserted by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-pagination">
+                            <button id="prevPage" class="pagination-btn"><i class="material-icons">chevron_left</i></button>
+                            <span id="pageIndicator">Page 1 of 5</span>
+                            <button id="nextPage" class="pagination-btn"><i class="material-icons">chevron_right</i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+    <script src="loan-history.js"></script>
+</body>
+</html>

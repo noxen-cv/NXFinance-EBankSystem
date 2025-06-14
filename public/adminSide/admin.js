@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize page animation
+    initPageAnimation();
+    
+    // Set active menu item
+    setActiveMenuItem();
+    
     // Sidebar Toggle Functionality
     const sidebarToggleBtn = document.getElementById('sidebar-toggle');
     const dashboardContainer = document.querySelector('.dashboard-container');
@@ -243,3 +249,46 @@ document.addEventListener('DOMContentLoaded', function() {
         notificationBtn.appendChild(badge);
     }
 });
+
+// Function to set the active menu item based on current page
+function setActiveMenuItem() {
+    const currentPage = window.location.pathname.split('/').pop();
+    const menuItems = document.querySelectorAll('.sidebar-nav .nav-item');
+    
+    menuItems.forEach(item => {
+        item.classList.remove('active');
+        const href = item.getAttribute('href');
+        
+        if (href === currentPage || 
+            (currentPage === '' && href === 'admin.html') || 
+            (currentPage === 'index.html' && href === 'admin.html')) {
+            item.classList.add('active');
+        }
+        
+        // Add smooth page transition
+        item.addEventListener('click', function(e) {
+            if (href !== currentPage) {
+                e.preventDefault();
+                const mainContent = document.querySelector('.main-content');
+                mainContent.style.opacity = '0';
+                mainContent.style.transition = 'opacity 0.3s ease';
+                
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300);
+            }
+        });
+    });
+}
+
+// Function to initialize page animation
+function initPageAnimation() {
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+        mainContent.style.opacity = '0';
+        setTimeout(() => {
+            mainContent.style.transition = 'opacity 0.3s ease';
+            mainContent.style.opacity = '1';
+        }, 10);
+    }
+}

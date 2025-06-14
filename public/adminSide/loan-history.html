@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+<head>    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NX Finance - Loan History</title>
     <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">
@@ -9,6 +8,8 @@
     <link rel="stylesheet" href="loan-history.css">
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Authentication check -->
+    <script src="../js/auth-check.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -40,10 +41,9 @@
             <header class="dashboard-header">
                 <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
                     <i class="material-icons">menu</i>
-                </button>
-                <div class="user-info">
+                </button>                <div class="user-info">
                     <span class="hello">Hello,</span>
-                    <span class="username">Admin</span>
+                    <span class="username" id="adminUsername">Admin</span>
                 </div>
             </header>
 
@@ -54,18 +54,17 @@
                     <!-- First card -->
                     <div class="history-card">
                         <h3>Loan Summary</h3>
-                        <div class="card-content">
-                            <div class="summary-stat">
+                        <div class="card-content">                            <div class="summary-stat">
                                 <span class="stat-label">Total Loans</span>
-                                <span class="stat-value">124</span>
+                                <span class="stat-value" id="totalLoans">0</span>
                             </div>
                             <div class="summary-stat">
                                 <span class="stat-label">Active Loans</span>
-                                <span class="stat-value">87</span>
+                                <span class="stat-value" id="activeLoans">0</span>
                             </div>
                             <div class="summary-stat">
                                 <span class="stat-label">Total Value</span>
-                                <span class="stat-value">₱4,235,000</span>
+                                <span class="stat-value" id="totalLoanValue">₱0</span>
                             </div>
                         </div>
                     </div>
@@ -73,18 +72,17 @@
                     <!-- Second card -->
                     <div class="history-card">
                         <h3>Repayment Status</h3>
-                        <div class="card-content">
-                            <div class="summary-stat">
+                        <div class="card-content">                            <div class="summary-stat">
                                 <span class="stat-label">On Time</span>
-                                <span class="stat-value">73%</span>
+                                <span class="stat-value" id="onTimePercentage">0%</span>
                             </div>
                             <div class="summary-stat">
                                 <span class="stat-label">Late</span>
-                                <span class="stat-value">18%</span>
+                                <span class="stat-value" id="latePercentage">0%</span>
                             </div>
                             <div class="summary-stat">
                                 <span class="stat-label">Defaulted</span>
-                                <span class="stat-value">9%</span>
+                                <span class="stat-value" id="defaultedPercentage">0%</span>
                             </div>
                         </div>
                     </div>

@@ -9,12 +9,12 @@ const router = express.Router();
 // Login route
 router.post('/login', async (req, res) => {
     try {
-        if (!req.body || !req.body.username || !req.body.password) {
-            return res.status(400).json({ error: 'Username and password are required' });
+        if (!req.body || !req.body.email || !req.body.password) {
+            return res.status(400).json({ error: 'Email and password are required' });
         }
 
-        const { username, password } = req.body;
-        const user = await User.findByCredentials(username, password);
+        const { email, password } = req.body;
+        const user = await User.findByEmailAndPassword(email, password);
         
         if (!user) {
             return res.status(401).json({ error: 'Invalid credentials' });
@@ -44,31 +44,86 @@ router.post('/login', async (req, res) => {
 // Register route
 router.post('/register', async (req, res) => {
     try {
+        console.log('Registration request received:', req.body);
+        
         const { username, password, email, first_name, last_name, date_of_birth, phone_number, address } = req.body;
         
-        // Check if user already exists
-        const existingUser = await User.findByUsername(username);
-        if (existingUser) {
-            return res.status(400).json({ error: 'Username already exists' });
+        // Validate required fields with detailed logging
+        if (!username || !password || !email || !first_name || !last_name) {
+            console.log('Missing required fields');
+            return res.status(400).json({ 
+                error: 'Missing required fields',
+                received: {
+                    username: !!username,
+                    password: !!password,
+                    email: !!email,
+                    first_name: !!first_name,
+                    last_name: !!last_name
+                }
+            });
+        }
+        
+        // Check if user already exists (by username)
+        try {
+            const existingUser = await User.findByUsername(username);
+            if (existingUser) {
+                console.log('Username already exists:', username);
+                return res.status(400).json({ error: 'Username already exists' });
+            }
+        } catch (error) {
+            console.error('Error checking username:', error);
+            return res.status(500).json({ error: 'Error checking username: ' + error.message });
+        }
+        
+        // Check if email already exists
+        try {
+            const emailExists = await User.findByEmail(email);
+            if (emailExists) {
+                console.log('Email already in use:', email);
+                return res.status(400).json({ error: 'Email already in use' });
+            }
+        } catch (error) {
+            console.error('Error checking email:', error);
+            return res.status(500).json({ error: 'Error checking email: ' + error.message });
         }
 
         // Create user
-        const user = await User.create({
-            username,
-            password,
-            email,
-            role: 'customer'
-        });
+        let user;
+        try {
+            user = await User.create({
+                username,
+                password,
+                email,
+                role: 'customer'
+            });
+            console.log('User created successfully:', user.id);
+        } catch (error) {
+            console.error('Error creating user:', error);
+            return res.status(500).json({ error: 'Error creating user: ' + error.message });
+        }
 
         // Create customer profile
-        const customer = await Customer.create({
-            user_id: user.id,
-            first_name,
-            last_name,
-            date_of_birth: date_of_birth || null,
-            address: address || null,
-            phone_number: phone_number || null
-        });
+        try {
+            const customer = await Customer.create({
+                user_id: user.id,
+                first_name,
+                last_name,
+                date_of_birth: date_of_birth || null,
+                address: address || null,
+                phone_number: phone_number || null
+            });
+            console.log('Customer profile created successfully:', customer.id);
+        } catch (error) {
+            console.error('Error creating customer profile:', error);
+            // Try to clean up the created user to avoid orphaned records
+            try {
+                await User.deleteUser(user.id);
+                console.log('Cleaned up user after customer creation failure:', user.id);
+            } catch (cleanupError) {
+                console.error('Failed to clean up user after customer creation error:', cleanupError);
+            }
+            return res.status(500).json({ error: 'Error creating customer profile: ' + error.message });
+        }
 
         res.status(201).json({ 
             success: true,

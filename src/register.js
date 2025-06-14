@@ -67,55 +67,132 @@ async function handleSignup(event) {
     
     try {
         signupButton.classList.add('loading');
-        loadingOverlay.style.display = 'flex';
-        
+        loadingOverlay.style.display = 'flex';        
         const formData = new FormData(event.target);
+        
+        // Debug log to see what fields are being submitted
+        console.log('Form fields:', {
+            username: formData.get('username'),
+            email: formData.get('email'),
+            password: '(hidden)',
+            first_name: formData.get('first_name'),
+            last_name: formData.get('last_name'),
+            phone_number: formData.get('phone_number')
+        });
+        
+        // Get values from form
         const userData = {
-            name: formData.get('name'),
+            username: formData.get('username'),
             email: formData.get('email'),
             password: formData.get('password'),
-            username: formData.get('email') // Using email as username for simplicity
-        };
+            first_name: formData.get('first_name'),
+            last_name: formData.get('last_name'),
+            date_of_birth: null,
+            phone_number: formData.get('phone_number') || null,
+            address: null
+        };        // Call your API to register the user
+        console.log('Sending registration request with data:', JSON.stringify(userData));
         
-        // Call your API to register the user
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData)
-        });
-
-        // Parse the response
-        let data;
+        let response;
         try {
-            const text = await response.text();
-            if (!text) {
-                throw new Error('Server returned empty response');
+            // First attempt with standard endpoint
+            response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData)
+            });
+            
+            console.log('Response status:', response.status);
+            console.log('Response headers:', Array.from(response.headers.entries()));
+            
+            // If we get a 405 Method Not Allowed error, try our fallback endpoint
+            if (response.status === 405) {
+                console.log('Received 405 error, trying fallback endpoint');
+                
+                response = await fetch('/api/auth/register-direct', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                console.log('Fallback endpoint response status:', response.status);
+                console.log('Fallback endpoint headers:', Array.from(response.headers.entries()));
             }
-            data = JSON.parse(text);
-        } catch (parseError) {
-            console.error('Failed to parse response:', parseError);
-            throw new Error('Server returned invalid response. Please try again.');
+        } catch (fetchError) {
+            console.error('Network error during fetch:', fetchError);
+            throw new Error('Connection error: Unable to reach the server. Please check your internet connection and try again.');
+        }        // Parse the response
+        let data;
+        const text = await response.text();
+        console.log('Raw response text:', text);
+        console.log('Response length:', text ? text.length : 0);
+        
+        // If the response is empty, handle based on status code
+        if (!text || text.trim() === '') {
+            console.log('Empty response received with status code:', response.status);
+            
+            if (response.ok) {
+                console.log('Empty but successful response, using default success data');
+                data = { success: true, message: 'Registration successful! You can now log in.' };
+            } else {
+                // Create a more specific error message based on status code
+                let errorMessage = 'Server returned empty response';
+                
+                if (response.status === 400) {
+                    errorMessage = 'Invalid registration data. Please check your information.';
+                } else if (response.status === 409) {
+                    errorMessage = 'Username or email already exists.';
+                } else if (response.status === 403) {
+                    errorMessage = 'Registration not allowed.';
+                } else {
+                    errorMessage = `Server error: HTTP ${response.status}. Check network tab for details.`;
+                }
+                
+                throw new Error(errorMessage);
+            }
         }
-
+        // Try to parse non-empty response
+        else {
+            try {
+                data = JSON.parse(text);
+                console.log('Registration response (parsed):', data);            } catch (parseError) {
+                console.error('Failed to parse response:', parseError);
+                
+                // If status is OK but parsing failed, create a default success response
+                if (response.ok) {
+                    data = { 
+                        success: true, 
+                        message: 'Registration successful! You can now log in.',
+                        note: 'Response could not be parsed but status was successful'
+                    };
+                    console.log('Created default success data due to parse error with OK status');
+                } else {
+                    throw new Error(`Server returned invalid response (HTTP ${response.status}). Please try again later.`);
+                }
+            }
+        }
+        
         if (!response.ok) {
-            throw new Error(data.error || 'Registration failed');
+            throw new Error(data.error || 'Registration failed. Please try again.');
         }
-
+        
         // Show success message
+        errorDiv.textContent = 'Registration successful! Redirecting to login...';
         errorDiv.style.backgroundColor = '#e8f5e9';
         errorDiv.style.color = '#2e7d32';
-        errorDiv.textContent = 'Account created successfully! Redirecting to login...';
         errorDiv.classList.add('visible');
         
-        // Redirect to login after successful registration
+        // Redirect to login page after a brief delay
         setTimeout(() => {
             document.body.classList.add('fade-out');
             setTimeout(() => {
                 window.location.href = 'login.html';
             }, 500);
-        }, 2000);
+        }, 1500);
 
     } catch (error) {
         // Show error message

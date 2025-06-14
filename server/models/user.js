@@ -32,6 +32,32 @@ class User {
             }
         }
     }
+    
+    static async findByEmailAndPassword(email, password) {
+        let client;
+        try {
+            client = await pool.connect();
+            const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
+            const user = result.rows[0];
+            
+            if (!user) {
+                return null;
+            }
+
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return null;
+            }
+            return user;
+        } catch (error) {
+            console.error('Error finding user by email:', error);
+            throw error;
+        } finally {
+            if (client) {
+                client.release();
+            }
+        }
+    }
 
     static async findById(id) {
         let client;
@@ -57,6 +83,22 @@ class User {
             return result.rows[0] || null;
         } catch (error) {
             console.error('Error finding user by username:', error);
+            throw error;
+        } finally {
+            if (client) {
+                client.release();
+            }
+        }
+    }
+
+    static async findByEmail(email) {
+        let client;
+        try {
+            client = await pool.connect();
+            const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
+            return result.rows[0] || null;
+        } catch (error) {
+            console.error('Error finding user by email:', error);
             throw error;
         } finally {
             if (client) {

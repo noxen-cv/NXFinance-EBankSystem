@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+<head>    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NX Finance - Admin Info</title>
     <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">
@@ -9,6 +8,8 @@
     <link rel="stylesheet" href="admin-info.css">
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Authentication check -->
+    <script src="../js/auth-check.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -41,10 +42,12 @@
             <header class="dashboard-header">
                 <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
                     <i class="material-icons">menu</i>
-                </button>
-                <div class="user-info">
+                </button>                <div class="user-info">
                     <span class="hello">Hello,</span>
-                    <span class="username">Admin</span>
+                    <span class="username" id="adminUsername">Admin</span>
+                    <button id="logoutBtn" class="logout-btn" onclick="logout()">
+                        <i class="material-icons">logout</i>
+                    </button>
                 </div>
             </header>
 
@@ -63,9 +66,9 @@
                             </div>
                         </div>
                         
-                        <div class="profile-info">
-                            <h1 id="lastName" class="admin-name">Last Name</h1>
-                            <h2 id="firstName" class="admin-title">First Name</h2>
+                        <div class="profile-info">                            <!-- Will be populated from API -->
+                            <h1 id="lastName" class="admin-name">Loading...</h1>
+                            <h2 id="firstName" class="admin-title">Loading...</h2>
                         </div>
 
                         <button id="editProfileBtn" class="edit-profile-btn">
@@ -77,26 +80,25 @@
                     <div class="admin-details-container">
                         <div class="admin-details">
                             <h3>Account Information</h3>
-                            <div class="details-grid">
-                                <div class="detail-item">
+                            <div class="details-grid">                                <div class="detail-item">
                                     <span class="detail-label">Email</span>
-                                    <span id="adminEmail" class="detail-value">admin@nxfinance.com</span>
+                                    <span id="adminEmail" class="detail-value">Loading...</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">Phone</span>
-                                    <span id="adminPhone" class="detail-value">+1 (555) 123-4567</span>
+                                    <span id="adminPhone" class="detail-value">Loading...</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">Role</span>
-                                    <span id="adminRole" class="detail-value">System Administrator</span>
+                                    <span id="adminRole" class="detail-value">Loading...</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">Department</span>
-                                    <span id="adminDepartment" class="detail-value">Finance Operations</span>
+                                    <span id="adminDepartment" class="detail-value">Loading...</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">Account Created</span>
-                                    <span id="adminJoined" class="detail-value">June 1, 2024</span>
+                                    <span id="adminJoined" class="detail-value">Loading...</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">Last Login</span>

@@ -79,7 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 borderWidth: 0,
                 cutout: '80%'
             }]
-        },        options: {
+        },
+        options: {
             responsive: true,
             maintainAspectRatio: true,
             aspectRatio: 1,
@@ -92,91 +93,91 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
-    });    // Sample loan data
-    const loanData = [
-        {
-            name: 'John Doe',
-            amount: 300000,
-            cardType: 'Visa Platinum',
-            date: '2025-06-24',
-            purpose: 'Home Renovation',
-            status: 'Lunas'
-        },
-        {
-            name: 'Jane Smith',
-            amount: 300000,
-            cardType: 'MasterCard Gold',
-            date: '2025-06-24',
-            purpose: 'Education',
-            status: 'Belum lunas'
-        },
-        {
-            name: 'Mike Johnson',
-            amount: 300000,
-            cardType: 'Visa Signature',
-            date: '2025-06-24',
-            purpose: 'Business Expansion',
-            status: 'Lunas'
-        },
-        {
-            name: 'Sarah Wilson',
-            amount: 300000,
-            cardType: 'MasterCard Titanium',
-            date: '2025-06-24',
-            purpose: 'Medical Expenses',
-            status: 'Belum lunas'
-        },
-        {
-            name: 'Tom Brown',
-            amount: 300000,
-            cardType: 'Visa Infinite',
-            date: '2025-06-24',
-            purpose: 'Debt Consolidation',
-            status: 'Lunas'
+    });
+
+    // Loan data will be fetched from API
+    let loanData = [];
+    
+    // Card data will be fetched from API
+    let cardData = [];
+
+    // Load dashboard data from API
+    async function loadDashboardData() {
+        try {
+            const response = await fetch('/api/admin/dashboard', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getAuthToken()}`
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to load dashboard data');
+            }
+            
+            const data = await response.json();
+            
+            // Update admin name
+            if (data.admin && data.admin.user) {
+                document.getElementById('adminUsername').textContent = data.admin.user.username || 'Admin';
+            }
+            
+            // Update dashboard metrics
+            document.getElementById('clientNumber').textContent = data.customerCount || 0;
+            
+            // Update loan health percentage
+            if (data.loanHealth !== undefined) {
+                updateLoanProgress(data.loanHealth);
+            }
+            
+            // Update available limit
+            if (data.availableLimit !== undefined) {
+                document.getElementById('availableLimit').textContent = `₱${data.availableLimit.toLocaleString()}`;
+            }
+            
+            // Update tables
+            if (data.approvedLoans) {
+                loanData = data.approvedLoans;
+                populateTable('loanTableBody', loanData);
+            }
+            
+            if (data.pendingLoans) {
+                cardData = data.pendingLoans;
+                populateTable('cardTableBody', cardData);
+            }
+            
+        } catch (error) {
+            console.error('Error loading dashboard data:', error);
+            showErrorMessage('Failed to load dashboard data. Please try again later.');
         }
-    ];    // Credit card application data
-    const cardData = [
-        {
-            name: 'Emily Clark',
-            amount: 250000,
-            cardType: 'Visa Platinum',
-            date: '2025-06-18',
-            purpose: 'Travel Expenses',
-            status: 'Lunas'
-        },
-        {
-            name: 'David Lee',
-            amount: 400000,
-            cardType: 'MasterCard Gold',
-            date: '2025-06-20',
-            purpose: 'Vehicle Purchase',
-            status: 'Belum lunas'
-        },
-        {
-            name: 'Jessica Wang',
-            amount: 350000,
-            cardType: 'Visa Signature',
-            date: '2025-06-22',
-            purpose: 'Wedding Expenses',
-            status: 'Lunas'
-        },
-        {
-            name: 'Robert Chen',
-            amount: 280000,
-            cardType: 'MasterCard Titanium',
-            date: '2025-06-23',
-            purpose: 'Home Appliances',
-            status: 'Belum lunas'
-        },
-        {
-            name: 'Lisa Adams',
-            amount: 320000,
-            cardType: 'Visa Infinite',
-            date: '2025-06-25',
-            purpose: 'Business Startup',
-            status: 'Lunas'
-        }
-    ];
+    }
+    
+    // Update loan progress chart
+    function updateLoanProgress(percentage) {
+        // Update chart
+        loanProgressChart.data.datasets[0].data = [percentage, 100 - percentage];
+        loanProgressChart.update();
+        
+        // Update text
+        document.getElementById('loanHealthPercentage').textContent = `${percentage}%`;
+        document.getElementById('loanHealthDetail').textContent = `*${percentage}% out of 100%`;
+    }
+    
+    // Helper function to get auth token from localStorage
+    function getAuthToken() {
+        return localStorage.getItem('authToken');
+    }
+    
+    // Show error message
+    function showErrorMessage(message) {
+        // Implementation depends on your UI for showing messages
+        console.error(message);
+        // You could add a notification system here
+    }
+
+    // Load data when page loads
+    loadDashboardData();
 
     // Function to populate a table with data
     function populateTable(tableId, data) {

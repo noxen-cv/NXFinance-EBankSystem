@@ -122,6 +122,16 @@ body {
     width: 100%;
 }
 
+.form-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.half-width {
+    width: calc(50% - 5px);
+}
+
 .full-width {
     width: 100%;
 }

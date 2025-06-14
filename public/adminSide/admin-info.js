@@ -25,9 +25,70 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Load admin profile data from API
+    async function loadAdminProfile() {
+        try {
+            const response = await fetch('/api/admin/profile', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getAuthToken()}`
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to load admin profile');
+            }
+            
+            const data = await response.json();
+            
+            // Update admin name
+            document.getElementById('adminUsername').textContent = data.user?.username || 'Admin';
+            document.getElementById('firstName').textContent = data.firstName || 'Loading...';
+            document.getElementById('lastName').textContent = data.lastName || 'Loading...';
+            
+            // Update admin details
+            document.getElementById('adminEmail').textContent = data.user?.email || 'Not available';
+            document.getElementById('adminPhone').textContent = data.phone || 'Not available';
+            document.getElementById('adminRole').textContent = data.role || 'Administrator';
+            document.getElementById('adminDepartment').textContent = data.department || 'Not specified';
+            
+            // Format created date
+            if (data.user?.createdAt) {
+                const createdDate = new Date(data.user.createdAt);
+                document.getElementById('adminJoined').textContent = createdDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } else {
+                document.getElementById('adminJoined').textContent = 'Not available';
+            }
+            
+            // If there's a profile image URL from the server, use it
+            if (data.profileImage) {
+                adminProfileImage.src = data.profileImage;
+                saveImageToLocalStorage(data.profileImage);
+            } else {
+                // Otherwise load from localStorage or default
+                loadProfileImage();
+            }
+            
+        } catch (error) {
+            console.error('Error loading admin profile:', error);
+            // Load from localStorage as fallback
+            loadProfileImage();
+            loadProfileInfo();
+        }
+    }
+    
+    // Helper function to get auth token
+    function getAuthToken() {
+        return localStorage.getItem('authToken');
+    }
+    
     // Load saved profile data when page loads
-    loadProfileImage();
-    loadProfileInfo();
+    loadAdminProfile();
     
     // Load profile image from localStorage if available
     function loadProfileImage() {

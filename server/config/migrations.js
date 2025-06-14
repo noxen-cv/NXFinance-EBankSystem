@@ -38,12 +38,11 @@ const createTables = async () => {
                 updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             )
         `);
-        
-        // Create customers table
+          // Create customers table
         await client.query(`
             CREATE TABLE IF NOT EXISTS customers (
                 id SERIAL PRIMARY KEY,
-                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE UNIQUE,
                 first_name VARCHAR(50) NOT NULL,
                 last_name VARCHAR(50) NOT NULL,
                 date_of_birth DATE,
@@ -55,11 +54,26 @@ const createTables = async () => {
             )
         `);
         
+        // Add unique constraint to customers.user_id if table exists but constraint doesn't
+        await client.query(`
+            DO $$
+            BEGIN
+                IF EXISTS (
+                    SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'customers'
+                ) AND NOT EXISTS (
+                    SELECT FROM pg_constraint WHERE conname = 'customers_user_id_key'
+                ) THEN
+                    ALTER TABLE customers ADD CONSTRAINT customers_user_id_key UNIQUE (user_id);
+                END IF;
+            END
+            $$;
+        `);
+        
         // Create admins table
         await client.query(`
             CREATE TABLE IF NOT EXISTS admins (
                 id SERIAL PRIMARY KEY,
-                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE UNIQUE,
                 first_name VARCHAR(50) NOT NULL,
                 last_name VARCHAR(50) NOT NULL,
                 department VARCHAR(50),
@@ -67,6 +81,21 @@ const createTables = async () => {
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             )
+        `);
+        
+        // Add unique constraint to admins.user_id if table exists but constraint doesn't
+        await client.query(`
+            DO $$
+            BEGIN
+                IF EXISTS (
+                    SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admins'
+                ) AND NOT EXISTS (
+                    SELECT FROM pg_constraint WHERE conname = 'admins_user_id_key'
+                ) THEN
+                    ALTER TABLE admins ADD CONSTRAINT admins_user_id_key UNIQUE (user_id);
+                END IF;
+            END
+            $$;
         `);
         
         // Create accounts table

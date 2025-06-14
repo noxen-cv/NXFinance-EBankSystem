@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Chart.js for the circular progress -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Authentication check -->
+    <script src="../js/auth-check.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -35,10 +37,12 @@
             <header class="dashboard-header">
                 <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
                     <i class="material-icons">menu</i>
-                </button>
-                <div class="user-info">
+                </button>                <div class="user-info">
                     <span class="hello">Hello,</span>
-                    <span class="username">Admin</span>
+                    <span class="username" id="adminUsername">Admin</span>
+                    <button id="logoutBtn" class="logout-btn" onclick="logout()">
+                        <i class="material-icons">logout</i>
+                    </button>
                 </div>
             </header><!-- Dashboard Content -->
             <div class="dashboard-content">                <!-- Limits Section -->
@@ -47,25 +51,23 @@
                         <div class="loan-progress">
                             <h3>Indicator Loan Health</h3>
                             <canvas id="loanProgressChart"></canvas>                            <div class="progress-info">
-                                <div class="percentage">0%</div>
-                                <div class="detail">*0% out of 100%</div>
+                                <div class="percentage" id="loanHealthPercentage">0%</div>
+                                <div class="detail" id="loanHealthDetail">*0% out of 100%</div>
                             </div>
                         </div>
                     </div>                    <div class="right-column">                        <div class="limit-card available">
                             <div class="centered-content">
                                 <div class="limit-icon">
                                     <i class="material-icons">account_balance_wallet</i>
-                                </div>
-                                <h3>Available Limit</h3>
-                                <h2>₱0</h2>
+                                </div>                                <h3>Available Limit</h3>
+                                <h2 id="availableLimit">₱0</h2>
                             </div>
                         </div>                          <div class="limit-card remaining">
                             <div class="centered-content">
                                 <div class="limit-icon">
                                     <i class="material-icons">person</i>
-                                </div>
-                                <h3>Client Number</h3>
-                                <h2>0</h2>
+                                </div>                                <h3>Client Number</h3>
+                                <h2 id="clientNumber">0</h2>
                             </div>
                         </div>
                     </div>                </div>
@@ -121,6 +123,7 @@
             </div>
         </main>
     </div>
+    <script src="../js/logout.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>

@@ -5,261 +5,242 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set active menu item
     setActiveMenuItem();
     
-    // Sample loan history data
-    const loanHistoryData = [
-        {
-            name: 'John Doe',
-            id: 'LN2025001',
-            amount: 300000,
-            interestRate: '12%',
-            term: '24 months',
-            startDate: '2025-01-15',
-            dueDate: '2027-01-15',
-            status: 'Active'
-        },
-        {
-            name: 'Jane Smith',
-            id: 'LN2025002',
-            amount: 150000,
-            interestRate: '10%',
-            term: '12 months',
-            startDate: '2025-02-20',
-            dueDate: '2026-02-20',
-            status: 'Late'
-        },
-        {
-            name: 'Michael Johnson',
-            id: 'LN2024050',
-            amount: 500000,
-            interestRate: '15%',
-            term: '36 months',
-            startDate: '2024-08-10',
-            dueDate: '2027-08-10',
-            status: 'Active'
-        },
-        {
-            name: 'Emily Brown',
-            id: 'LN2024023',
-            amount: 200000,
-            interestRate: '11%',
-            term: '24 months',
-            startDate: '2024-12-05',
-            dueDate: '2026-12-05',
-            status: 'Completed'
-        },
-        {
-            name: 'David Wilson',
-            id: 'LN2024089',
-            amount: 350000,
-            interestRate: '14%',
-            term: '24 months',
-            startDate: '2024-09-30',
-            dueDate: '2026-09-30',
-            status: 'Defaulted'
-        },
-        {
-            name: 'Sarah Taylor',
-            id: 'LN2025008',
-            amount: 180000,
-            interestRate: '9.5%',
-            term: '18 months',
-            startDate: '2025-03-15',
-            dueDate: '2026-09-15',
-            status: 'Active'
-        },
-        {
-            name: 'Robert Martinez',
-            id: 'LN2024102',
-            amount: 420000,
-            interestRate: '13%',
-            term: '36 months',
-            startDate: '2024-11-20',
-            dueDate: '2027-11-20',
-            status: 'Active'
-        },
-        {
-            name: 'Jennifer Lee',
-            id: 'LN2024067',
-            amount: 250000,
-            interestRate: '12.5%',
-            term: '24 months',
-            startDate: '2024-07-25',
-            dueDate: '2026-07-25',
-            status: 'Completed'
-        },
-        {
-            name: 'Thomas Anderson',
-            id: 'LN2025012',
-            amount: 280000,
-            interestRate: '11.5%',
-            term: '30 months',
-            startDate: '2025-05-05',
-            dueDate: '2027-11-05',
-            status: 'Active'
-        },
-        {
-            name: 'Jessica Williams',
-            id: 'LN2024095',
-            amount: 320000,
-            interestRate: '13.5%',
-            term: '24 months',
-            startDate: '2024-10-10',
-            dueDate: '2026-10-10',
-            status: 'Late'
+    // Loan history data will be fetched from API
+    let loanHistoryData = [];
+    
+    // Load loan history data from server
+    async function loadLoanHistory() {
+        try {
+            const response = await fetch('/api/admin/loans', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getAuthToken()}`
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to load loan history');
+            }
+            
+            const data = await response.json();
+            
+            // Update admin name
+            document.getElementById('adminUsername').textContent = data.adminName || 'Admin';
+            
+            // Update loan summary statistics
+            updateLoanSummary(data.summary);
+            
+            // Update loan history table
+            if (data.loans && Array.isArray(data.loans)) {
+                loanHistoryData = data.loans;
+                applyFiltersAndSort();
+            }
+            
+        } catch (error) {
+            console.error('Error loading loan history:', error);
+            showEmptyState();
         }
-    ];
-
-    // Pagination variables
-    let currentPage = 1;
-    const rowsPerPage = 5;
-    let filteredData = [...loanHistoryData];
-
-    // Function to populate loan history table
-    function populateHistoryTable(page = 1) {
+    }
+    
+    // Update loan summary statistics
+    function updateLoanSummary(summary) {
+        if (!summary) return;
+        
+        // Update loan counts
+        document.getElementById('totalLoans').textContent = summary.totalLoans || 0;
+        document.getElementById('activeLoans').textContent = summary.activeLoans || 0;
+        
+        // Update total loan value
+        const totalLoanValue = summary.totalLoanValue || 0;
+        document.getElementById('totalLoanValue').textContent = `₱${totalLoanValue.toLocaleString()}`;
+        
+        // Update repayment percentages
+        document.getElementById('onTimePercentage').textContent = `${summary.onTimePercentage || 0}%`;
+        document.getElementById('latePercentage').textContent = `${summary.latePercentage || 0}%`;
+        document.getElementById('defaultedPercentage').textContent = `${summary.defaultedPercentage || 0}%`;
+    }
+    
+    // Get auth token from localStorage
+    function getAuthToken() {
+        return localStorage.getItem('authToken');
+    }
+    
+    // Show empty state with message when no data is available
+    function showEmptyState() {
         const tableBody = document.getElementById('loanHistoryTableBody');
         if (!tableBody) return;
         
-        tableBody.innerHTML = ''; // Clear existing content
-        
-        const startIndex = (page - 1) * rowsPerPage;
-        const endIndex = Math.min(startIndex + rowsPerPage, filteredData.length);
-        
-        // Update page indicator
-        const pageIndicator = document.getElementById('pageIndicator');
-        if (pageIndicator) {
-            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-            pageIndicator.textContent = `Page ${page} of ${totalPages || 1}`;
-        }
-        
-        // Enable/disable pagination buttons
-        const prevBtn = document.getElementById('prevPage');
-        const nextBtn = document.getElementById('nextPage');
-        
-        if (prevBtn) prevBtn.disabled = page <= 1;
-        if (nextBtn) nextBtn.disabled = page >= Math.ceil(filteredData.length / rowsPerPage);
-        
-        // Create rows for the current page
-        for (let i = startIndex; i < endIndex; i++) {
-            const item = filteredData[i];
-            const row = document.createElement('tr');
-            
-            row.innerHTML = `
-                <td><input type="checkbox" class="history-checkbox"></td>
-                <td>${item.name}</td>
-                <td>${item.id}</td>
-                <td>₱${item.amount.toLocaleString()}</td>
-                <td>${item.interestRate}</td>
-                <td>${item.term}</td>
-                <td>${formatDate(item.startDate)}</td>
-                <td>${formatDate(item.dueDate)}</td>
-                <td><span class="status-badge status-${item.status.toLowerCase()}">${item.status}</span></td>
-                <td><a href="#" class="action-btn">Details</a></td>
-            `;
-            
-            tableBody.appendChild(row);
-        }
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="8" class="empty-state">
+                    <div class="empty-message">
+                        <i class="material-icons">info</i>
+                        <p>No loan history data available. New loans will appear here.</p>
+                    </div>
+                </td>
+            </tr>
+        `;
     }
-
-    // Format date to MM/DD/YYYY
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    
+    // Table filters
+    const statusFilter = document.getElementById('statusFilter');
+    const dateFilter = document.getElementById('dateFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const searchInput = document.getElementById('searchInput');
+    
+    // Filter change event listeners
+    if (statusFilter) statusFilter.addEventListener('change', applyFiltersAndSort);
+    if (dateFilter) dateFilter.addEventListener('change', applyFiltersAndSort);
+    if (sortFilter) sortFilter.addEventListener('change', applyFiltersAndSort);
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            // Debounce search input
+            clearTimeout(this.debounceTimer);
+            this.debounceTimer = setTimeout(applyFiltersAndSort, 300);
+        });
     }
-
-    // Handle filters
-    function applyFilters() {
-        const statusFilter = document.getElementById('statusFilter').value;
-        const dateFilter = document.getElementById('dateFilter').value;
-        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    
+    // Apply all filters and sort to the table
+    function applyFiltersAndSort() {
+        const currentStatusFilter = statusFilter ? statusFilter.value : 'all';
+        const currentDateFilter = dateFilter ? dateFilter.value : 'all';
+        const currentSortFilter = sortFilter ? sortFilter.value : 'newest';
+        const currentSearchQuery = (searchInput ? searchInput.value : '').toLowerCase().trim();
         
-        filteredData = loanHistoryData.filter(item => {
+        // Filter loan history data
+        const filteredData = loanHistoryData.filter(item => {
+            // Search query filter
+            if (currentSearchQuery) {
+                const nameMatch = item.name.toLowerCase().includes(currentSearchQuery);
+                const idMatch = item.id.toLowerCase().includes(currentSearchQuery);
+                const purposeMatch = (item.purpose && item.purpose.toLowerCase().includes(currentSearchQuery));
+                
+                if (!nameMatch && !idMatch && !purposeMatch) {
+                    return false;
+                }
+            }
+            
             // Status filter
-            if (statusFilter !== 'all' && item.status.toLowerCase() !== statusFilter) {
+            if (currentStatusFilter !== 'all' && item.status.toLowerCase() !== currentStatusFilter.toLowerCase()) {
                 return false;
             }
             
             // Date filter
-            if (dateFilter !== 'all') {
+            if (currentDateFilter !== 'all') {
                 const loanStartDate = new Date(item.startDate);
                 const currentDate = new Date();
                 
-                if (dateFilter === 'month') {
-                    if (loanStartDate.getMonth() !== currentDate.getMonth() || 
-                        loanStartDate.getFullYear() !== currentDate.getFullYear()) {
-                        return false;
-                    }
-                } else if (dateFilter === 'quarter') {
-                    const currentQuarter = Math.floor(currentDate.getMonth() / 3);
-                    const loanQuarter = Math.floor(loanStartDate.getMonth() / 3);
-                    
-                    if (loanQuarter !== currentQuarter || 
-                        loanStartDate.getFullYear() !== currentDate.getFullYear()) {
-                        return false;
-                    }
-                } else if (dateFilter === 'year') {
-                    if (loanStartDate.getFullYear() !== currentDate.getFullYear()) {
-                        return false;
-                    }
+                if (currentDateFilter === 'month') {
+                    const oneMonthAgo = new Date();
+                    oneMonthAgo.setMonth(currentDate.getMonth() - 1);
+                    return loanStartDate >= oneMonthAgo;
+                } else if (currentDateFilter === 'quarter') {
+                    const threeMonthsAgo = new Date();
+                    threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
+                    return loanStartDate >= threeMonthsAgo;
+                } else if (currentDateFilter === 'year') {
+                    const oneYearAgo = new Date();
+                    oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
+                    return loanStartDate >= oneYearAgo;
                 }
-            }
-            
-            // Search filter
-            if (searchInput) {
-                const searchFields = [
-                    item.name.toLowerCase(),
-                    item.id.toLowerCase(),
-                    item.status.toLowerCase()
-                ];
-                
-                return searchFields.some(field => field.includes(searchInput));
             }
             
             return true;
         });
         
-        // Reset to first page after filtering
-        currentPage = 1;
-        populateHistoryTable(currentPage);
+        // Sort the filtered data
+        filteredData.sort((a, b) => {
+            if (currentSortFilter === 'newest') {
+                return new Date(b.startDate) - new Date(a.startDate);
+            } else if (currentSortFilter === 'oldest') {
+                return new Date(a.startDate) - new Date(b.startDate);
+            } else if (currentSortFilter === 'highest') {
+                return b.amount - a.amount;
+            } else if (currentSortFilter === 'lowest') {
+                return a.amount - b.amount;
+            }
+            return 0;
+        });
+        
+        // Update the table with filtered and sorted data
+        populateLoanTable(filteredData);
+        
+        // Update result count
+        const resultCountElement = document.getElementById('resultCount');
+        if (resultCountElement) {
+            resultCountElement.textContent = filteredData.length;
+        }
     }
-
-    // Initialize table
-    populateHistoryTable(currentPage);
-
-    // Set up event listeners
-    document.getElementById('statusFilter')?.addEventListener('change', applyFilters);
-    document.getElementById('dateFilter')?.addEventListener('change', applyFilters);
-    document.getElementById('searchBtn')?.addEventListener('click', applyFilters);
-    document.getElementById('searchInput')?.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            applyFilters();
+    
+    // Populate loan history table
+    function populateLoanTable(data) {
+        const tableBody = document.getElementById('loanHistoryTableBody');
+        if (!tableBody) return;
+        
+        // Clear existing content
+        tableBody.innerHTML = '';
+        
+        if (data.length === 0) {
+            showEmptyState();
+            return;
         }
-    });
-
-    // Pagination controls
-    document.getElementById('prevPage')?.addEventListener('click', function() {
-        if (currentPage > 1) {
-            currentPage--;
-            populateHistoryTable(currentPage);
-        }
-    });
-
-    document.getElementById('nextPage')?.addEventListener('click', function() {
-        if (currentPage < Math.ceil(filteredData.length / rowsPerPage)) {
-            currentPage++;
-            populateHistoryTable(currentPage);
-        }
-    });
-
-    // Select all checkbox
-    const selectAllCheckbox = document.getElementById('selectAllHistory');
-    if (selectAllCheckbox) {
-        selectAllCheckbox.addEventListener('change', function() {
-            const historyCheckboxes = document.querySelectorAll('.history-checkbox');
-            historyCheckboxes.forEach(checkbox => {
-                checkbox.checked = selectAllCheckbox.checked;
+        
+        // Add each loan to the table
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            
+            // Format dates
+            const formattedStartDate = formatDate(item.startDate);
+            const formattedDueDate = formatDate(item.dueDate);
+            
+            row.innerHTML = `
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td>₱${item.amount.toLocaleString()}</td>
+                <td>${item.interestRate}</td>
+                <td>${item.term}</td>
+                <td>${formattedStartDate}</td>
+                <td>${formattedDueDate}</td>
+                <td><span class="status-badge status-${item.status.toLowerCase()}">${item.status}</span></td>
+                <td>
+                    <button class="view-details-btn" data-loan-id="${item.id}">
+                        <i class="material-icons">visibility</i>
+                    </button>
+                </td>
+            `;
+            
+            tableBody.appendChild(row);
+        });
+        
+        // Add event listeners to view details buttons
+        const viewDetailsBtns = document.querySelectorAll('.view-details-btn');
+        viewDetailsBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const loanId = this.getAttribute('data-loan-id');
+                viewLoanDetails(loanId);
             });
         });
-    }    // Handle responsive sidebar toggle - same as admin.js for consistency
+    }
+    
+    // Format date to readable form
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+    
+    // View loan details (placeholder function)
+    function viewLoanDetails(loanId) {
+        console.log(`View details for loan ID: ${loanId}`);
+        // This would typically open a modal or navigate to a detail page
+        alert(`Viewing details for loan ${loanId} - This feature is under development`);
+    }
+    
+    // Initialize sidebar toggle functionality
     const sidebarToggleBtn = document.getElementById('sidebar-toggle');
     const dashboardContainer = document.querySelector('.dashboard-container');
     const sidebar = document.querySelector('.sidebar');
@@ -273,91 +254,29 @@ document.addEventListener('DOMContentLoaded', function() {
         dashboardContainer.classList.add('sidebar-open');
     }
     
-    sidebarToggleBtn.addEventListener('click', function() {
-        if (window.innerWidth < 769) {
-            sidebar.classList.toggle('closed');
-            sidebar.classList.toggle('open');
-        } else {
-            dashboardContainer.classList.toggle('sidebar-closed');
-            dashboardContainer.classList.toggle('sidebar-open');
-        }
-    });
-    
-    // Close sidebar when clicking on the backdrop
-    backdrop.addEventListener('click', function() {
-        if (window.innerWidth < 769 && sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-            sidebar.classList.add('closed');
-        }
-    });
-    
-    // Close sidebar when clicking outside on mobile
-    document.addEventListener('click', function(e) {
-        if (window.innerWidth < 769 && 
-            !sidebar.contains(e.target) && 
-            !sidebarToggleBtn.contains(e.target) && 
-            sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-            sidebar.classList.add('closed');
-        }
-    });
-    
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        if (window.innerWidth < 769) {
-            dashboardContainer.classList.remove('sidebar-closed');
-            dashboardContainer.classList.remove('sidebar-open');
-            if (!sidebar.classList.contains('open')) {
-                sidebar.classList.add('closed');
+    // Toggle sidebar on button click
+    if (sidebarToggleBtn) {
+        sidebarToggleBtn.addEventListener('click', function() {
+            if (window.innerWidth < 769) {
+                sidebar.classList.toggle('closed');
+                sidebar.classList.toggle('open');
+            } else {
+                dashboardContainer.classList.toggle('sidebar-closed');
+                dashboardContainer.classList.toggle('sidebar-open');
             }
-        } else {
-            sidebar.classList.remove('closed');
-            sidebar.classList.remove('open');
-            if (!dashboardContainer.classList.contains('sidebar-closed')) {
-                dashboardContainer.classList.add('sidebar-open');
-            }
-        }
-    });
-    
-    // Function to set the active menu item based on current page
-    function setActiveMenuItem() {
-        const currentPage = window.location.pathname.split('/').pop();
-        const menuItems = document.querySelectorAll('.sidebar-nav .nav-item');
-        
-        menuItems.forEach(item => {
-            item.classList.remove('active');
-            const href = item.getAttribute('href');
-            
-            if (href === currentPage || 
-                (currentPage === '' && href === 'admin.html') || 
-                (currentPage === 'index.html' && href === 'admin.html')) {                item.classList.add('active');
-            }
-            
-            // Add smooth page transition
-            item.addEventListener('click', function(e) {
-                if (href !== currentPage) {
-                    e.preventDefault();
-                    const mainContent = document.querySelector('.main-content');
-                    mainContent.style.opacity = '0';
-                    mainContent.style.transition = 'opacity 0.3s ease';
-                    
-                    setTimeout(() => {
-                        window.location.href = href;
-                    }, 300);
-                }
-            });
         });
     }
     
-    // Function to initialize page animation
-    function initPageAnimation() {
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.style.opacity = '0';
-            setTimeout(() => {
-                mainContent.style.transition = 'opacity 0.3s ease';
-                mainContent.style.opacity = '1';
-            }, 10);
-        }
+    // Close sidebar when clicking on backdrop
+    if (backdrop) {
+        backdrop.addEventListener('click', function() {
+            if (window.innerWidth < 769 && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('closed');
+            }
+        });
     }
+    
+    // Load data when page loads
+    loadLoanHistory();
 });

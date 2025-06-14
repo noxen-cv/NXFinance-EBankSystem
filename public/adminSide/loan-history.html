@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NX Finance - Loan History</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>NX Finance - Customer Database</title>
     <link rel="icon" href="./Assets/NX Finance Logo Transparent Black.png" type="image/png">
     <link rel="stylesheet" href="admin.css">
-    <link rel="stylesheet" href="loan-history.css">
+    <link rel="stylesheet" href="customer-database.css">
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Authentication check -->
@@ -18,17 +17,16 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo-container">
-                <img src="./Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" class="logo">
+                <img src="../Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" class="logo">
             </div>
             <nav class="sidebar-nav">
                 <a href="admin.html" class="nav-item">
                     <i class="material-icons">dashboard</i>
                     <span>Dashboard</span>
-                </a>
-                <a href="loan-history.html" class="nav-item active">
-                    <i class="material-icons">payment</i>
-                    <span>Loan History</span>
-                </a>                <a href="admin-info.html" class="nav-item">
+                </a>                <a href="loan-history.html" class="nav-item active">
+                    <i class="material-icons">people</i>
+                    <span>Customer Database</span>
+                </a><a href="admin-info.html" class="nav-item">
                     <i class="material-icons">person</i>
                     <span>Admin Info</span>
                 </a>
@@ -45,59 +43,59 @@
                     <span class="hello">Hello,</span>
                     <span class="username" id="adminUsername">Admin</span>
                 </div>
-            </header>
-
-            <!-- Loan History Content -->
+            </header>            <!-- Customer Database Content -->
             <div class="dashboard-content">
                 <!-- Two-column layout for the top section -->
                 <div class="history-cards-container">
                     <!-- First card -->
                     <div class="history-card">
-                        <h3>Loan Summary</h3>
-                        <div class="card-content">                            <div class="summary-stat">
-                                <span class="stat-label">Total Loans</span>
-                                <span class="stat-value" id="totalLoans">0</span>
+                        <h3>Customer Summary</h3>
+                        <div class="card-content">
+                            <div class="summary-stat">
+                                <span class="stat-label">Total Customers</span>
+                                <span class="stat-value" id="totalCustomers">0</span>
                             </div>
                             <div class="summary-stat">
-                                <span class="stat-label">Active Loans</span>
-                                <span class="stat-value" id="activeLoans">0</span>
+                                <span class="stat-label">Active Accounts</span>
+                                <span class="stat-value" id="activeAccounts">0</span>
                             </div>
                             <div class="summary-stat">
-                                <span class="stat-label">Total Value</span>
-                                <span class="stat-value" id="totalLoanValue">₱0</span>
+                                <span class="stat-label">New This Month</span>
+                                <span class="stat-value" id="newCustomers">0</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Second card -->
                     <div class="history-card">
-                        <h3>Repayment Status</h3>
-                        <div class="card-content">                            <div class="summary-stat">
-                                <span class="stat-label">On Time</span>
-                                <span class="stat-value" id="onTimePercentage">0%</span>
+                        <h3>Customer Analytics</h3>
+                        <div class="card-content">
+                            <div class="summary-stat">
+                                <span class="stat-label">Verified</span>
+                                <span class="stat-value" id="verifiedCustomers">0%</span>
                             </div>
                             <div class="summary-stat">
-                                <span class="stat-label">Late</span>
-                                <span class="stat-value" id="latePercentage">0%</span>
+                                <span class="stat-label">With Loans</span>
+                                <span class="stat-value" id="customersWithLoans">0%</span>
                             </div>
                             <div class="summary-stat">
-                                <span class="stat-label">Defaulted</span>
-                                <span class="stat-value" id="defaultedPercentage">0%</span>
+                                <span class="stat-label">Premium</span>
+                                <span class="stat-value" id="premiumCustomers">0%</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Large full-width table section -->
-                <div class="loan-history-section">
+                <div class="customer-database-section">
                     <div class="table-section">
-                        <h3 class="section-title">Complete Loan History</h3>
+                        <h3 class="section-title">Complete Customer Database</h3>
                         <div class="table-filters">
                             <select id="statusFilter" class="filter-select">
-                                <option value="all">All Status</option>
+                                <option value="all">All Customers</option>
                                 <option value="active">Active</option>
-                                <option value="completed">Completed</option>
-                                <option value="defaulted">Defaulted</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="premium">Premium</option>
                             </select>
                             <select id="dateFilter" class="filter-select">
                                 <option value="all">All Time</option>
@@ -106,7 +104,7 @@
                                 <option value="year">This Year</option>
                             </select>
                             <div class="search-container">
-                                <input type="text" id="searchInput" placeholder="Search loans...">
+                                <input type="text" id="searchInput" placeholder="Search customers...">
                                 <button id="searchBtn"><i class="material-icons">search</i></button>
                             </div>
                         </div>
@@ -114,35 +112,32 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAllHistory"></th>
-                                        <th>Account Name</th>
-                                        <th>Loan ID</th>
-                                        <th>Loan Amount</th>
-                                        <th>Interest Rate</th>
-                                        <th>Term</th>
-                                        <th>Start Date</th>
-                                        <th>Due Date</th>
+                                        <th><input type="checkbox" id="selectAllCustomers"></th>
+                                        <th>Customer ID</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Registration Date</th>
                                         <th>Status</th>
+                                        <th>Total Loans</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="loanHistoryTableBody">
+                                <tbody id="customerTableBody">
                                     <!-- Table rows will be inserted by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
                         <div class="table-pagination">
                             <button id="prevPage" class="pagination-btn"><i class="material-icons">chevron_left</i></button>
-                            <span id="pageIndicator">Page 1 of 5</span>
+                            <span id="pageIndicator">Page 1 of 1</span>
                             <button id="nextPage" class="pagination-btn"><i class="material-icons">chevron_right</i></button>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-    </div>
-
-    <script src="admin.js"></script>
-    <script src="loan-history.js"></script>
+    </div>    <script src="admin.js"></script>
+    <script src="customer-database.js"></script>
 </body>
 </html>

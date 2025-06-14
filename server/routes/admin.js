@@ -10,13 +10,9 @@ const User = require('../models/user');
 const authMiddleware = require('../middleware/auth');
 const { validateAdminRole } = require('../middleware/validation');
 
-// Apply authentication and admin role validation to all admin routes (except in development)
-const isDevelopment = process.env.NODE_ENV === 'development' || true;
-
-if (!isDevelopment) {
-    router.use(authMiddleware);
-    router.use(validateAdminRole);
-}
+// Apply authentication and admin role validation to all admin routes
+router.use(authMiddleware);
+router.use(validateAdminRole);
 
 // Get admin dashboard data
 router.get('/dashboard', async (req, res) => {
@@ -320,100 +316,6 @@ router.put('/loans/:id/status', async (req, res) => {
         });
     } catch (error) {
         console.error('Error updating loan status:', error);
-        res.status(500).json({ error: 'Server error' });
-    }
-});
-
-// Get admin profile information
-router.get('/profile', async (req, res) => {
-    try {
-        const isDevelopment = process.env.NODE_ENV === 'development' || true;
-        let admin = null;
-        
-        if (!isDevelopment && req.user) {
-            admin = await Admin.findByUserId(req.user.id);
-            if (!admin) {
-                return res.status(404).json({ error: 'Admin profile not found' });
-            }
-        } else {
-            // For development, return default admin data
-            admin = {
-                id: 1,
-                user_id: 1,
-                first_name: 'System',
-                last_name: 'Administrator',
-                department: 'IT',
-                position: 'Senior Administrator'
-            };
-        }
-        
-        res.json({
-            success: true,
-            user: { username: 'Admin' },
-            firstName: admin.first_name || 'System',
-            lastName: admin.last_name || 'Administrator',
-            department: admin.department || 'IT',
-            position: admin.position || 'Administrator',
-            email: 'admin@nxfinance.com',
-            phone: '+63 912 345 6789'
-        });
-    } catch (error) {
-        console.error('Error retrieving admin profile:', error);
-        res.status(500).json({ error: 'Server error' });
-    }
-});
-
-// Get loan history for admin
-router.get('/loans', async (req, res) => {
-    try {
-        // Get all loans with customer details
-        const allLoansQuery = `
-            SELECT 
-                l.id, l.amount, l.created_at, l.status, l.purpose,
-                c.first_name, c.last_name, 
-                lt.name as loan_type_name
-            FROM loans l
-            JOIN customers c ON l.customer_id = c.id
-            JOIN loan_types lt ON l.loan_type_id = lt.id
-            ORDER BY l.created_at DESC
-        `;
-        
-        const pool = require('../config/database');
-        const client = await pool.connect();
-        const result = await client.query(allLoansQuery);
-        client.release();
-        
-        // Format loans for admin view
-        const formattedLoans = result.rows.map(loan => ({
-            id: loan.id,
-            customerName: `${loan.first_name} ${loan.last_name}`,
-            amount: parseFloat(loan.amount),
-            loanType: loan.loan_type_name,
-            purpose: loan.purpose || 'General Purpose',
-            status: loan.status,
-            date: new Date(loan.created_at).toLocaleDateString(),
-            created_at: loan.created_at
-        }));
-        
-        // Calculate summary statistics
-        const approved = formattedLoans.filter(l => l.status.toLowerCase() === 'approved');
-        const pending = formattedLoans.filter(l => l.status.toLowerCase() === 'pending');
-        const rejected = formattedLoans.filter(l => l.status.toLowerCase() === 'rejected');
-        
-        res.json({
-            success: true,
-            adminName: 'Admin',
-            loans: formattedLoans,
-            summary: {
-                totalLoans: formattedLoans.length,
-                approvedLoans: approved.length,
-                pendingLoans: pending.length,
-                rejectedLoans: rejected.length,
-                totalAmount: formattedLoans.reduce((sum, loan) => sum + loan.amount, 0)
-            }
-        });
-    } catch (error) {
-        console.error('Error retrieving loan history:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });

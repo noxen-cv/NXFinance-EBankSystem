@@ -7,42 +7,10 @@
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Chart.js for the circular progress -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Authentication check -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>    <!-- Authentication check -->
     <script src="../js/auth-check.js"></script>
-    <style>
-        .debug-panel {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            width: 250px;
-            background: rgba(0,0,0,0.8);
-            color: #00ff00;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            z-index: 9999;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .debug-panel h3 {
-            margin-top: 0;
-            color: white;
-        }
-        .debug-panel .log {
-            margin-bottom: 5px;
-            font-size: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 3px;
-        }
-    </style>
 </head>
 <body>
-    <div class="debug-panel">
-        <h3>Debug Log</h3>
-        <div id="debug-log"></div>
-    </div>
-
     <div class="dashboard-container">
         <!-- Sidebar Backdrop for Mobile -->
         <div class="sidebar-backdrop"></div>
@@ -54,9 +22,9 @@
                     <i class="material-icons">dashboard</i>
                     <span>Dashboard</span>
                 </a>                <a href="loan-history.html" class="nav-item">
-                    <i class="material-icons">payment</i>
-                    <span>Loan History</span>
-                </a>                <a href="admin-info.html" class="nav-item">
+                    <i class="material-icons">people</i>
+                    <span>Customer Database</span>
+                </a><a href="admin-info.html" class="nav-item">
                     <i class="material-icons">person</i>
                     <span>Admin Info</span>
                 </a>
@@ -101,55 +69,6 @@
                             </div>
                         </div>
                     </div>                </div>
-                
-                <!-- Tables Container -->
-                <div class="tables-container">                    <!-- Loan Table -->
-                    <div class="table-section">
-                        <h3 class="section-title">Approved Request</h3>
-                        <div class="table-wrapper">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="selectAllLoan"></th>
-                                        <th>Account Name</th>
-                                        <th>Loan Amount</th>
-                                        <th>Credit Card Type</th>
-                                        <th>Payment Date</th>
-                                        <th>Loan Purpose</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="loanTableBody">
-                                    <!-- Table rows will be inserted by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                      <!-- Credit Card Table -->
-                    <div class="table-section">
-                        <h3 class="section-title">Pending Request</h3>
-                        <div class="table-wrapper">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="selectAllCard"></th>
-                                        <th>Account Name</th>
-                                        <th>Loan Amount</th>
-                                        <th>Credit Card Type</th>
-                                        <th>Payment Date</th>
-                                        <th>Loan Purpose</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cardTableBody">
-                                    <!-- Table rows will be inserted by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
             </div>
         </main>
     </div>

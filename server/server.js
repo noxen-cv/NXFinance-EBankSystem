@@ -131,7 +131,7 @@ app.use('/api/*', (req, res, next) => {
         
         // For all other methods to registration endpoint
         return res.status(405).json({
-            error: 'Method not allowed for registration. Use POST only.',
+            error: 'Method not allowed for registrapp.get(ation. Use POST only.',
             debug: true,
             requestMethod: req.method,
             allowedMethods: ['POST'],

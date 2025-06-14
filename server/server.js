@@ -78,7 +78,12 @@ const initializeDatabase = async () => {
     }
 };
 
-// API Routes
+// Direct registration handlers (must come before router mounting)
+const { handleRegistration } = require('./direct-register');
+app.post('/api/auth/register', handleRegistration);
+app.post('/api/auth/register-direct', handleRegistration);
+
+// API Routes (excluding registration which is handled above)
 app.use('/api/auth', authRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/admin', adminRoutes);
@@ -87,61 +92,29 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api/cards', cardRoutes);
 app.use('/api/loans', loanRoutes);
 
-// Direct fallback registration endpoint in case the router has issues
-app.post('/api/auth/register-direct', async (req, res) => {
-    try {
-        console.log('FALLBACK registration endpoint hit');
-        
-        const { username, password, email, first_name, last_name, phone_number } = req.body;
-        
-        // Validate required fields
-        if (!username || !password || !email || !first_name || !last_name) {
-            console.log('Missing required fields in fallback registration');
-            return res.status(400).json({ 
-                error: 'Missing required fields',
-                received: {
-                    username: !!username,
-                    password: !!password,
-                    email: !!email,
-                    first_name: !!first_name,
-                    last_name: !!last_name
-                }
+// Special 405 Method Not Allowed handler
+app.use((req, res, next) => {
+    const allowedMethods = {
+        '/api/auth/register': ['POST', 'OPTIONS'],
+        '/api/auth/login': ['POST', 'OPTIONS']
+    };
+    
+    const path = req.path;
+    
+    if (path in allowedMethods && !allowedMethods[path].includes(req.method)) {
+        console.log(`405 handler: ${req.method} not allowed for ${path}`);
+        return res.status(405)
+            .set('Allow', allowedMethods[path].join(', '))
+            .json({
+                error: `Method ${req.method} not allowed for ${path}`,
+                allowedMethods: allowedMethods[path]
             });
-        }
-        
-        // Create user
-        const user = await User.create({
-            username,
-            password, // Will be hashed in the User.create method
-            email,
-            role: 'customer'
-        });
-        
-        console.log('User created in fallback:', user.id);
-        
-        // Create customer profile
-        const customer = await Customer.create({
-            user_id: user.id,
-            first_name,
-            last_name,
-            phone_number: phone_number || null
-        });
-        
-        console.log('Customer created in fallback:', customer.id);
-        
-        res.status(201).json({ 
-            success: true,
-            message: 'Registration successful (fallback route)',
-            user: {
-                id: user.id,
-                username: user.username
-            }
-        });
-    } catch (error) {
-        console.error('Fallback registration error:', error);
-        res.status(500).json({ error: 'Server error: ' + error.message });
     }
+    
+    next();
 });
+
+// This section has been moved to the API Routes section above
 
 // Add a 404 handler that creates a better error message
 app.use('/api/*', (req, res, next) => {

@@ -94,24 +94,20 @@ async function handleSignup(event) {
         console.log('Sending registration request with data:', JSON.stringify(userData));
         
         let response;
-        try {
-            // First attempt with standard endpoint
-            response = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userData)
-            });
+        let endpointsToTry = [
+            '/api/auth/register',
+            '/api/auth/register-direct'
+        ];
+        let success = false;
+        let lastError;
+        
+        // Try each endpoint until one works
+        for (const endpoint of endpointsToTry) {
+            if (success) break;
             
-            console.log('Response status:', response.status);
-            console.log('Response headers:', Array.from(response.headers.entries()));
-            
-            // If we get a 405 Method Not Allowed error, try our fallback endpoint
-            if (response.status === 405) {
-                console.log('Received 405 error, trying fallback endpoint');
-                
-                response = await fetch('/api/auth/register-direct', {
+            try {
+                console.log(`Trying registration endpoint: ${endpoint}`);
+                response = await fetch(endpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -119,13 +115,24 @@ async function handleSignup(event) {
                     body: JSON.stringify(userData)
                 });
                 
-                console.log('Fallback endpoint response status:', response.status);
-                console.log('Fallback endpoint headers:', Array.from(response.headers.entries()));
+                console.log(`${endpoint} response status:`, response.status);
+                
+                if (response.status !== 405) { // If not Method Not Allowed
+                    success = true;
+                    console.log('Successfully used endpoint:', endpoint);
+                    break;
+                } else {
+                    console.log(`${endpoint} returned 405, will try next endpoint if available`);
+                    lastError = new Error(`${endpoint} returned method not allowed`);
+                }
+            } catch (fetchError) {
+                console.error(`Error with ${endpoint}:`, fetchError);
+                lastError = fetchError;
             }
-        } catch (fetchError) {
-            console.error('Network error during fetch:', fetchError);
-            throw new Error('Connection error: Unable to reach the server. Please check your internet connection and try again.');
-        }        // Parse the response
+        }        
+        if (!success && !response) {
+            throw lastError || new Error('All registration endpoints failed');
+        }// Parse the response
         let data;
         const text = await response.text();
         console.log('Raw response text:', text);

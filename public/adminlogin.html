@@ -216,10 +216,11 @@
                 
                 // Success animation and redirect
                 setTimeout(() => {
-                    document.body.style.opacity = '0';
-                    setTimeout(() => {
+                    document.body.style.opacity = '0';                    setTimeout(() => {
                         // Redirect based on user role
-                        window.location.href = data.user.role === 'admin' ? 'admin.html' : 'index.html';
+                        const redirectUrl = data.user.role === 'admin' ? './adminSide/admin.html' : 'index.html';
+                        console.log('[DEBUG] Redirecting to:', redirectUrl);
+                        window.location.href = redirectUrl;
                     }, 500);
                 }, 1000);
 

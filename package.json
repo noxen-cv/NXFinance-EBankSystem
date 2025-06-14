@@ -7,7 +7,8 @@
     "start": "node server/server.js",
     "dev": "nodemon server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "node server/config/migrations.js"
+    "migrate": "node server/config/migrations.js",
+    "seed": "node server/seed-data.js"
   },
   "repository": {
     "type": "git",

@@ -45,8 +45,14 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Special CORS handling for registration endpoint
+// Special CORS handling for registration endpoints
 app.options('/api/auth/register', cors({ 
+    origin: true,
+    methods: ['POST'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.options('/api/auth/register-direct', cors({ 
     origin: true,
     methods: ['POST'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -96,6 +102,7 @@ app.use('/api/loans', loanRoutes);
 app.use((req, res, next) => {
     const allowedMethods = {
         '/api/auth/register': ['POST', 'OPTIONS'],
+        '/api/auth/register-direct': ['POST', 'OPTIONS'],
         '/api/auth/login': ['POST', 'OPTIONS']
     };
     
@@ -117,12 +124,12 @@ app.use((req, res, next) => {
 // This section has been moved to the API Routes section above
 
 // Add a 404 handler that creates a better error message
-app.use('/api/*', (req, res, next) => {
-    console.log(`Unmatched API route: ${req.method} ${req.originalUrl}`);
+app.use('/api', (req, res, next) => {
+    console.log(`API route handler: ${req.method} ${req.originalUrl}`);
     
     // If this is a registration attempt
     if (req.originalUrl.includes('/api/auth/register')) {
-        console.log('Registration attempt failed to match a route');
+        console.log('Registration attempt handled by catch-all handler');
         
         // If this is an OPTIONS request, handle it specially
         if (req.method === 'OPTIONS') {
@@ -131,7 +138,7 @@ app.use('/api/*', (req, res, next) => {
         
         // For all other methods to registration endpoint
         return res.status(405).json({
-            error: 'Method not allowed for registrapp.get(ation. Use POST only.',
+            error: 'Method not allowed for registration. Use POST only.',
             debug: true,
             requestMethod: req.method,
             allowedMethods: ['POST'],

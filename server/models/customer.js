@@ -37,11 +37,10 @@ class Customer {
                 client.release();
             }
         }
-    }
-
-    static async create(customerData) {
+    }    static async create(customerData) {
         const { 
             user_id, 
+            email,
             first_name, 
             last_name, 
             date_of_birth = null, 
@@ -54,12 +53,22 @@ class Customer {
         
         try {
             client = await pool.connect();
+            
+            // If email isn't provided, fetch it from users table
+            let customerEmail = email;
+            if (!customerEmail) {
+                const userResult = await client.query('SELECT email FROM users WHERE id = $1', [user_id]);
+                if (userResult.rows.length > 0) {
+                    customerEmail = userResult.rows[0].email;
+                }
+            }
+            
             const result = await client.query(
                 `INSERT INTO customers 
-                (user_id, first_name, last_name, date_of_birth, address, phone_number, profile_picture) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7) 
+                (user_id, email, first_name, last_name, date_of_birth, address, phone_number, profile_picture) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
                 RETURNING *`,
-                [user_id, first_name, last_name, date_of_birth, address, phone_number, profile_picture]
+                [user_id, customerEmail, first_name, last_name, date_of_birth, address, phone_number, profile_picture]
             );
             
             return result.rows[0];

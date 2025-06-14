@@ -37,11 +37,10 @@ class Admin {
                 client.release();
             }
         }
-    }
-
-    static async create(adminData) {
+    }    static async create(adminData) {
         const { 
             user_id, 
+            email,
             first_name, 
             last_name, 
             department = null, 
@@ -52,12 +51,22 @@ class Admin {
         
         try {
             client = await pool.connect();
+            
+            // If email isn't provided, fetch it from users table
+            let adminEmail = email;
+            if (!adminEmail) {
+                const userResult = await client.query('SELECT email FROM users WHERE id = $1', [user_id]);
+                if (userResult.rows.length > 0) {
+                    adminEmail = userResult.rows[0].email;
+                }
+            }
+            
             const result = await client.query(
                 `INSERT INTO admins 
-                (user_id, first_name, last_name, department, access_level) 
-                VALUES ($1, $2, $3, $4, $5) 
+                (user_id, email, first_name, last_name, department, access_level) 
+                VALUES ($1, $2, $3, $4, $5, $6) 
                 RETURNING *`,
-                [user_id, first_name, last_name, department, access_level]
+                [user_id, adminEmail, first_name, last_name, department, access_level]
             );
             
             return result.rows[0];

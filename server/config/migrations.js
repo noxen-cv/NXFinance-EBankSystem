@@ -43,6 +43,7 @@ const createTables = async () => {
             CREATE TABLE IF NOT EXISTS customers (
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE UNIQUE,
+                email VARCHAR(100),
                 first_name VARCHAR(50) NOT NULL,
                 last_name VARCHAR(50) NOT NULL,
                 date_of_birth DATE,
@@ -54,16 +55,21 @@ const createTables = async () => {
             )
         `);
         
-        // Add unique constraint to customers.user_id if table exists but constraint doesn't
+        // Add email column to customers table if it doesn't exist
         await client.query(`
             DO $$
             BEGIN
-                IF EXISTS (
-                    SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'customers'
-                ) AND NOT EXISTS (
-                    SELECT FROM pg_constraint WHERE conname = 'customers_user_id_key'
+                IF NOT EXISTS (
+                    SELECT FROM information_schema.columns 
+                    WHERE table_name = 'customers' AND column_name = 'email'
                 ) THEN
-                    ALTER TABLE customers ADD CONSTRAINT customers_user_id_key UNIQUE (user_id);
+                    ALTER TABLE customers ADD COLUMN email VARCHAR(100);
+                    
+                    -- Update existing records to copy email from users table
+                    UPDATE customers c
+                    SET email = u.email
+                    FROM users u
+                    WHERE c.user_id = u.id AND c.email IS NULL;
                 END IF;
             END
             $$;
@@ -74,6 +80,7 @@ const createTables = async () => {
             CREATE TABLE IF NOT EXISTS admins (
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE UNIQUE,
+                email VARCHAR(100),
                 first_name VARCHAR(50) NOT NULL,
                 last_name VARCHAR(50) NOT NULL,
                 department VARCHAR(50),
@@ -83,16 +90,21 @@ const createTables = async () => {
             )
         `);
         
-        // Add unique constraint to admins.user_id if table exists but constraint doesn't
+        // Add email column to admins table if it doesn't exist
         await client.query(`
             DO $$
             BEGIN
-                IF EXISTS (
-                    SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admins'
-                ) AND NOT EXISTS (
-                    SELECT FROM pg_constraint WHERE conname = 'admins_user_id_key'
+                IF NOT EXISTS (
+                    SELECT FROM information_schema.columns 
+                    WHERE table_name = 'admins' AND column_name = 'email'
                 ) THEN
-                    ALTER TABLE admins ADD CONSTRAINT admins_user_id_key UNIQUE (user_id);
+                    ALTER TABLE admins ADD COLUMN email VARCHAR(100);
+                    
+                    -- Update existing records to copy email from users table
+                    UPDATE admins a
+                    SET email = u.email
+                    FROM users u
+                    WHERE a.user_id = u.id AND a.email IS NULL;
                 END IF;
             END
             $$;
@@ -240,10 +252,10 @@ const insertDefaultData = async () => {
             
             // Create admin profile if not exists
             await client.query(`
-                INSERT INTO admins (user_id, first_name, last_name, department, access_level)
-                VALUES ($1, 'System', 'Administrator', 'IT', 'super_admin')
+                INSERT INTO admins (user_id, email, first_name, last_name, department, access_level)
+                VALUES ($1, $2, 'System', 'Administrator', 'IT', 'super_admin')
                 ON CONFLICT (user_id) DO NOTHING
-            `, [adminUserId]);
+            `, [adminUserId, 'admin@nxfinance.com']);
         }
         
         // Create default customer user if not exists
@@ -264,11 +276,11 @@ const insertDefaultData = async () => {
             
             // Create customer profile if not exists
             await client.query(`
-                INSERT INTO customers (user_id, first_name, last_name, date_of_birth, address, phone_number)
-                VALUES ($1, 'John', 'Doe', '1990-01-01', '123 Main St, City', '+1234567890')
+                INSERT INTO customers (user_id, email, first_name, last_name, date_of_birth, address, phone_number)
+                VALUES ($1, $2, 'John', 'Doe', '1990-01-01', '123 Main St, City', '+1234567890')
                 ON CONFLICT (user_id) DO NOTHING
                 RETURNING id
-            `, [customerUserId]);
+            `, [customerUserId, 'customer@example.com']);
             
             // Get the customer ID
             const customerProfileResult = await client.query(`

@@ -59,12 +59,10 @@ async function handleRegistration(req, res) {
         );
         
         const user = userResult.rows[0];
-        console.log('User created in direct handler:', user.id);
-        
-        // Insert customer
+        console.log('User created in direct handler:', user.id);          // Insert customer
         const customerResult = await client.query(
-            'INSERT INTO customers (user_id, first_name, last_name, phone_number) VALUES ($1, $2, $3, $4) RETURNING *',
-            [user.id, first_name, last_name, phone_number || null]
+            'INSERT INTO customers (user_id, email, first_name, last_name, phone_number, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [user.id, email, first_name, last_name, phone_number || null, req.body.address || null]
         );
         
         const customer = customerResult.rows[0];

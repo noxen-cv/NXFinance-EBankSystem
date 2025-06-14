@@ -26,6 +26,13 @@ app.use((req, res, next) => {
         console.log('Request body:', req.body ? JSON.stringify(req.body) : '(no body)');
     }
     
+    // Add CORS debug logging
+    res.on('finish', () => {
+        console.log(`[CORS DEBUG] Response headers for ${req.originalUrl}:`);
+        console.log(`  Access-Control-Allow-Origin: ${res.getHeader('Access-Control-Allow-Origin')}`);
+        console.log(`  Access-Control-Allow-Credentials: ${res.getHeader('Access-Control-Allow-Credentials')}`);
+    });
+    
     next();
 });
 
@@ -34,7 +41,26 @@ const { runMigrations } = require('./config/migrations');
 
 // Middleware
 app.use(cors({
-    origin: true, // Allow all origins
+    origin: function (origin, callback) {
+        // Allow specific origins
+        const allowedOrigins = [
+            'http://localhost:5500', 
+            'http://127.0.0.1:5500', 
+            'http://localhost:3000',
+            'http://127.0.0.1:3000'
+        ];
+        
+        // Allow requests with no origin (like mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes(origin)) {
+            console.log(`[CORS] Allowing origin: ${origin}`);
+            return callback(null, true);
+        } else {
+            console.log(`[CORS] Blocking origin: ${origin}`);
+            return callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -47,21 +73,38 @@ app.use(express.urlencoded({ extended: true }));
 
 // Special CORS handling for registration and login endpoints
 app.options('/api/auth/register', cors({ 
-    origin: true,
-    methods: ['POST'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000'],
+    methods: ['POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 
 app.options('/api/auth/register-direct', cors({ 
-    origin: true,
-    methods: ['POST'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000'],
+    methods: ['POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+app.options('/api/auth/login', cors({ 
+    origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000'],
+    methods: ['POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 
 app.options('/api/auth/login-direct', cors({ 
-    origin: true,
-    methods: ['POST'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000'],
+    methods: ['POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+app.options('/api/auth/login-direct', cors({ 
+    origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000'],
+    methods: ['POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 
 app.use(session({

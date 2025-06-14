@@ -16,6 +16,16 @@ async function handleLogin(req, res) {
     console.log('[DEBUG] Request headers:', JSON.stringify(req.headers));
     console.log('[DEBUG] Request body:', req.body ? JSON.stringify(req.body) : '(no body)');
     
+    // Set proper CORS headers explicitly
+    const origin = req.headers.origin;
+    const allowedOrigins = ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000'];
+    
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+        console.log(`[CORS FIX] Set origin to: ${origin}`);
+    }
+    
     // Detailed debugging for empty body
     if (!req.body) {
         console.log('[DEBUG] Request body is undefined/null. Content-Type header:', req.headers['content-type']);

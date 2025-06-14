@@ -12,9 +12,14 @@ require('dotenv').config();
 const PORT = 3000;
 
 // Create HTTP server
-const server = http.createServer(async (req, res) => {    // Enable CORS for all routes with extended configuration
-    const origin = req.headers.origin || '*';
-    res.setHeader('Access-Control-Allow-Origin', origin);
+const server = http.createServer(async (req, res) => {    // Enable CORS for all routes with specific origins for credentials
+    const allowedOrigins = ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000'];
+    const origin = req.headers.origin;
+    
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
     res.setHeader('Access-Control-Allow-Credentials', 'true');

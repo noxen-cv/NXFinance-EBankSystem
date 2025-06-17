@@ -97,23 +97,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize data arrays
     let loanData = [];
-    let cardData = [];      // Load dashboard data from API
+    let cardData = [];    // Load dashboard data from API
     async function loadDashboardData() {
         try {
+            console.log('Loading dashboard data...');
             const token = localStorage.getItem('token');
             
-            if (!token) {
-                console.error('No authentication token found');
-                return;
-            }
-
-            const apiUrl = '/api/admin/dashboard';
-                
+            // Prepare headers - include token if available, but allow requests without it for development
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+                console.log('Using authentication token');
+            } else {
+                console.log('No token found, attempting without authentication (development mode)');
+            }            const apiUrl = window.API_CONFIG ? 
+                window.API_CONFIG.getUrl('/api/admin/dashboard') : 
+                'http://localhost:3000/api/admin/dashboard';
+            
             const response = await fetch(apiUrl, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+                headers: headers
             });
             
             if (!response.ok) {
@@ -121,14 +126,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const data = await response.json();
+            console.log('Dashboard data received:', data);
             
             // Update admin name
             if (data.admin && data.admin.user) {
-                document.getElementById('adminUsername').textContent = data.admin.user.username || 'Admin';
+                const usernameEl = document.getElementById('adminUsername');
+                if (usernameEl) {
+                    usernameEl.textContent = data.admin.user.username || 'Admin';
+                }
             }
             
             // Update dashboard metrics
-            document.getElementById('clientNumber').textContent = data.customerCount || 0;
+            const clientNumberEl = document.getElementById('clientNumber');
+            if (clientNumberEl) {
+                clientNumberEl.textContent = data.customerCount || 0;
+            }
             
             // Update loan health percentage
             if (data.loanHealth !== undefined) {
@@ -136,10 +148,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Update available limit
-            if (data.availableLimit !== undefined) {                document.getElementById('availableLimit').textContent = `₱${data.availableLimit.toLocaleString()}`;
+            if (data.availableLimit !== undefined) {
+                const availableLimitEl = document.getElementById('availableLimit');
+                if (availableLimitEl) {
+                    availableLimitEl.textContent = `₱${data.availableLimit.toLocaleString()}`;
+                }
             }
             
-        } catch (error) {
+            console.log('Dashboard data loaded successfully');
+              } catch (error) {
             console.error('Error loading dashboard data:', error);
             showErrorMessage('Failed to load dashboard data. Please try again later.');
         }

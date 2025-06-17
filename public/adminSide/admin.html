@@ -16,8 +16,7 @@
     <div class="dashboard-container">
         <!-- Sidebar Backdrop for Mobile -->
         <div class="sidebar-backdrop"></div>
-        <!-- Sidebar -->
-        <aside class="sidebar">            <div class="logo-container">
+        <!-- Sidebar -->        <aside class="sidebar">            <div class="logo-container">
                 <img src="../Assets/NX Finance Banner Transparent.png" alt="NX Finance Logo" class="logo">
             </div>
             <nav class="sidebar-nav">                <a href="admin.html" class="nav-item active">
@@ -31,18 +30,22 @@
                     <span>Admin Info</span>
                 </a>
             </nav>
-        </aside>        <!-- Main Content -->
+            
+            <!-- Logout Section -->
+            <div class="sidebar-logout">
+                <button id="logoutBtn" class="logout-btn" onclick="logout()">
+                    <i class="material-icons">logout</i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside><!-- Main Content -->
         <main class="main-content">
-            <!-- Header -->
-            <header class="dashboard-header">
+            <!-- Header -->            <header class="dashboard-header">
                 <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
                     <i class="material-icons">menu</i>
                 </button>                <div class="user-info">
                     <span class="hello">Hello,</span>
                     <span class="username" id="adminUsername">Admin</span>
-                    <button id="logoutBtn" class="logout-btn" onclick="logout()">
-                        <i class="material-icons">logout</i>
-                    </button>
                 </div>
             </header><!-- Dashboard Content -->
             <div class="dashboard-content">                <!-- Limits Section -->

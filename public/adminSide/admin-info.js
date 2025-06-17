@@ -33,27 +33,61 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         console.log('loadAdminProfile: Loading admin profile for admin-info page...');
-        
-        try {
+          try {
             // TODO: Create /api/admin/profile endpoint on server
             console.warn('loadAdminProfile: API endpoint /api/admin/profile not implemented yet');
             
-            // For now, use mock data
+            // For now, use mock data with all required fields
             const mockData = {
-                user: { username: 'Admin' },
-                firstName: 'Admin',
-                lastName: 'User'
+                user: { 
+                    username: 'Admin',
+                    email: 'admin@nxfinance.com',
+                    createdAt: '2023-01-15T00:00:00Z'
+                },
+                firstName: 'NX Finance',
+                lastName: 'Administrator',
+                phone: '+1 (555) 123-4567',
+                role: 'System Administrator',
+                department: 'Information Technology'
             };
             
-            // Update admin name
+            // Update admin name in header
             const adminUsernameEl = document.getElementById('adminUsername');
+            if (adminUsernameEl) adminUsernameEl.textContent = mockData.user?.username || 'Admin';
+            
+            // Update profile display name
             const firstNameEl = document.getElementById('firstName');
             const lastNameEl = document.getElementById('lastName');
-            
-            if (adminUsernameEl) adminUsernameEl.textContent = mockData.user?.username || 'Admin';
             if (firstNameEl) firstNameEl.textContent = mockData.firstName || 'Loading...';
             if (lastNameEl) lastNameEl.textContent = mockData.lastName || 'Loading...';
             
+            // Update admin details
+            const adminEmailEl = document.getElementById('adminEmail');
+            const adminPhoneEl = document.getElementById('adminPhone');
+            const adminRoleEl = document.getElementById('adminRole');
+            const adminDepartmentEl = document.getElementById('adminDepartment');
+            const adminJoinedEl = document.getElementById('adminJoined');
+            
+            if (adminEmailEl) adminEmailEl.textContent = mockData.user?.email || 'Not available';
+            if (adminPhoneEl) adminPhoneEl.textContent = mockData.phone || 'Not available';
+            if (adminRoleEl) adminRoleEl.textContent = mockData.role || 'Administrator';
+            if (adminDepartmentEl) adminDepartmentEl.textContent = mockData.department || 'Not specified';
+            
+            // Format and display joined date
+            if (adminJoinedEl) {
+                if (mockData.user?.createdAt) {
+                    const createdDate = new Date(mockData.user.createdAt);
+                    adminJoinedEl.textContent = createdDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                } else {
+                    adminJoinedEl.textContent = 'June 14, 2025';
+                }
+            }
+            
+            console.log('Admin profile loaded with mock data');
             return;
             
             /* Original API call - commented out until endpoint exists */

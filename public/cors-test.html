@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Test</h1>
+    <button onclick="testCors()">Test CORS</button>
+    <div id="result"></div>
+
+    <script>
+        async function testCors() {
+            const resultDiv = document.getElementById('result');
+            try {
+                console.log('Testing CORS from:', window.location.origin);
+                
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        email: 'test@test.com',
+                        password: 'wrongpass'
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                resultDiv.innerHTML = `
+                    <h3>CORS Test Result:</h3>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <p><strong>Response:</strong> ${JSON.stringify(data)}</p>
+                    <p><strong>Origin:</strong> ${window.location.origin}</p>
+                `;
+                
+            } catch (error) {
+                console.error('CORS Test Failed:', error);
+                resultDiv.innerHTML = `
+                    <h3>CORS Test Failed:</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Origin:</strong> ${window.location.origin}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

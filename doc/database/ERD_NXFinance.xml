@@ -1,0 +1,372 @@
+    <?xml version="1.0" encoding="UTF-8"?>
+    <mxfile host="app.diagrams.net" modified="2025-06-14T00:00:00.000Z" agent="5.0" etag="ERD_NXFinance" version="24.7.17">
+    <diagram name="NXFinance ERD" id="nxfinance-erd">
+        <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+        <root>
+            <mxCell id="0" />
+            <mxCell id="1" parent="0" />
+            
+            <!-- Users Table -->
+            <mxCell id="users-table" value="" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=center;fontSize=14;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+            <mxGeometry x="50" y="50" width="200" height="240" as="geometry" />
+            </mxCell>
+            <mxCell id="users-title" value="users" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;fontStyle=1" vertex="1" parent="users-table">
+            <mxGeometry y="30" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="users-id" value="🔑 id (SERIAL, PK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="users-table">
+            <mxGeometry y="60" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="users-email" value="email (VARCHAR, UNIQUE)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="users-table">
+            <mxGeometry y="90" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="users-password" value="password (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="users-table">
+            <mxGeometry y="120" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="users-role" value="role (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="users-table">
+            <mxGeometry y="150" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="users-created" value="created_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="users-table">
+            <mxGeometry y="180" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="users-updated" value="updated_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="users-table">
+            <mxGeometry y="210" width="200" height="30" as="geometry" />
+            </mxCell>
+
+            <!-- Customers Table -->
+            <mxCell id="customers-table" value="" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=center;fontSize=14;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+            <mxGeometry x="350" y="50" width="200" height="360" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-title" value="customers" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;fontStyle=1" vertex="1" parent="customers-table">
+            <mxGeometry y="30" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-id" value="🔑 id (SERIAL, PK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="60" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-user-id" value="🔗 user_id (INT, FK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="90" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-first-name" value="first_name (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="120" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-last-name" value="last_name (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="150" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-email" value="email (VARCHAR, UNIQUE)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="180" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-phone" value="phone (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="210" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-address" value="address (TEXT)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="240" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-date-birth" value="date_of_birth (DATE)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="270" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-created" value="created_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="300" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="customers-updated" value="updated_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="customers-table">
+            <mxGeometry y="330" width="200" height="30" as="geometry" />
+            </mxCell>
+
+            <!-- Admins Table -->
+            <mxCell id="admins-table" value="" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=center;fontSize=14;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+            <mxGeometry x="650" y="50" width="200" height="270" as="geometry" />
+            </mxCell>
+            <mxCell id="admins-title" value="admins" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;fontStyle=1" vertex="1" parent="admins-table">
+            <mxGeometry y="30" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="admins-id" value="🔑 id (SERIAL, PK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="admins-table">
+            <mxGeometry y="60" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="admins-user-id" value="🔗 user_id (INT, FK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="admins-table">
+            <mxGeometry y="90" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="admins-first-name" value="first_name (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="admins-table">
+            <mxGeometry y="120" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="admins-last-name" value="last_name (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="admins-table">
+            <mxGeometry y="150" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="admins-email" value="email (VARCHAR, UNIQUE)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="admins-table">
+            <mxGeometry y="180" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="admins-created" value="created_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="admins-table">
+            <mxGeometry y="210" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="admins-updated" value="updated_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="admins-table">
+            <mxGeometry y="240" width="200" height="30" as="geometry" />
+            </mxCell>
+
+            <!-- Accounts Table -->
+            <mxCell id="accounts-table" value="" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=center;fontSize=14;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+            <mxGeometry x="350" y="480" width="200" height="300" as="geometry" />
+            </mxCell>
+            <mxCell id="accounts-title" value="accounts" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;fontStyle=1" vertex="1" parent="accounts-table">
+            <mxGeometry y="30" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="accounts-id" value="🔑 id (SERIAL, PK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="accounts-table">
+            <mxGeometry y="60" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="accounts-customer-id" value="🔗 customer_id (INT, FK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="accounts-table">
+            <mxGeometry y="90" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="accounts-number" value="account_number (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="accounts-table">
+            <mxGeometry y="120" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="accounts-type" value="account_type (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="accounts-table">
+            <mxGeometry y="150" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="accounts-balance" value="balance (DECIMAL)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="accounts-table">
+            <mxGeometry y="180" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="accounts-status" value="status (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="accounts-table">
+            <mxGeometry y="210" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="accounts-created" value="created_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="accounts-table">
+            <mxGeometry y="240" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="accounts-updated" value="updated_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="accounts-table">
+            <mxGeometry y="270" width="200" height="30" as="geometry" />
+            </mxCell>
+
+            <!-- Loan Types Table -->
+            <mxCell id="loan-types-table" value="" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=center;fontSize=14;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+            <mxGeometry x="950" y="50" width="200" height="180" as="geometry" />
+            </mxCell>
+            <mxCell id="loan-types-title" value="loan_types" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;fontStyle=1" vertex="1" parent="loan-types-table">
+            <mxGeometry y="30" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loan-types-id" value="🔑 id (SERIAL, PK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loan-types-table">
+            <mxGeometry y="60" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loan-types-name" value="name (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loan-types-table">
+            <mxGeometry y="90" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loan-types-rate" value="interest_rate (DECIMAL)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loan-types-table">
+            <mxGeometry y="120" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loan-types-description" value="description (TEXT)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loan-types-table">
+            <mxGeometry y="150" width="200" height="30" as="geometry" />
+            </mxCell>
+
+            <!-- Loans Table -->
+            <mxCell id="loans-table" value="" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=center;fontSize=14;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
+            <mxGeometry x="650" y="350" width="220" height="420" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-title" value="loans" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;fontStyle=1" vertex="1" parent="loans-table">
+            <mxGeometry y="30" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-id" value="🔑 id (SERIAL, PK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="60" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-customer-id" value="🔗 customer_id (INT, FK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="90" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-type-id" value="🔗 loan_type_id (INT, FK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="120" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-amount" value="amount (DECIMAL)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="150" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-interest-rate" value="interest_rate (DECIMAL)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="180" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-term" value="term_months (INT)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="210" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-status" value="status (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="240" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-purpose" value="purpose (TEXT)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="270" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-application-date" value="application_date (DATE)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="300" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-approval-date" value="approval_date (DATE)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="330" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-created" value="created_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="360" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="loans-updated" value="updated_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="loans-table">
+            <mxGeometry y="390" width="220" height="30" as="geometry" />
+            </mxCell>
+
+            <!-- Transactions Table -->
+            <mxCell id="transactions-table" value="" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=center;fontSize=14;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+            <mxGeometry x="50" y="380" width="220" height="330" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-title" value="transactions" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;fontStyle=1" vertex="1" parent="transactions-table">
+            <mxGeometry y="30" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-id" value="🔑 id (SERIAL, PK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="transactions-table">
+            <mxGeometry y="60" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-account-id" value="🔗 account_id (INT, FK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="transactions-table">
+            <mxGeometry y="90" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-type" value="transaction_type (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="transactions-table">
+            <mxGeometry y="120" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-amount" value="amount (DECIMAL)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="transactions-table">
+            <mxGeometry y="150" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-description" value="description (TEXT)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="transactions-table">
+            <mxGeometry y="180" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-balance-before" value="balance_before (DECIMAL)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="transactions-table">
+            <mxGeometry y="210" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-balance-after" value="balance_after (DECIMAL)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="transactions-table">
+            <mxGeometry y="240" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-status" value="status (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="transactions-table">
+            <mxGeometry y="270" width="220" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="transactions-created" value="created_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="transactions-table">
+            <mxGeometry y="300" width="220" height="30" as="geometry" />
+            </mxCell>
+
+            <!-- Credit Cards Table -->
+            <mxCell id="credit-cards-table" value="" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=center;fontSize=14;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+            <mxGeometry x="950" y="320" width="200" height="300" as="geometry" />
+            </mxCell>
+            <mxCell id="credit-cards-title" value="credit_cards" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;fontStyle=1" vertex="1" parent="credit-cards-table">
+            <mxGeometry y="30" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="credit-cards-id" value="🔑 id (SERIAL, PK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="credit-cards-table">
+            <mxGeometry y="60" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="credit-cards-customer-id" value="🔗 customer_id (INT, FK)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="credit-cards-table">
+            <mxGeometry y="90" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="credit-cards-number" value="card_number (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="credit-cards-table">
+            <mxGeometry y="120" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="credit-cards-type" value="card_type (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="credit-cards-table">
+            <mxGeometry y="150" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="credit-cards-limit" value="credit_limit (DECIMAL)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="credit-cards-table">
+            <mxGeometry y="180" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="credit-cards-balance" value="current_balance (DECIMAL)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="credit-cards-table">
+            <mxGeometry y="210" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="credit-cards-status" value="status (VARCHAR)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="credit-cards-table">
+            <mxGeometry y="240" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="credit-cards-created" value="created_at (TIMESTAMP)" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="credit-cards-table">
+            <mxGeometry y="270" width="200" height="30" as="geometry" />
+            </mxCell>
+
+            <!-- Relationships -->
+            
+            <!-- Users to Customers -->
+            <mxCell id="users-customers-rel" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="users-id" target="customers-user-id">
+            <mxGeometry width="50" height="50" relative="1" as="geometry">
+                <mxPoint x="300" y="200" as="sourcePoint" />
+                <mxPoint x="350" y="150" as="targetPoint" />
+            </mxGeometry>
+            </mxCell>
+            <mxCell id="users-customers-label" value="1:1" style="resizable=0;html=1;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="users-customers-rel">
+            <mxGeometry relative="1" as="geometry" />
+            </mxCell>
+
+            <!-- Users to Admins -->
+            <mxCell id="users-admins-rel" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="users-id" target="admins-user-id">
+            <mxGeometry width="50" height="50" relative="1" as="geometry">
+                <mxPoint x="300" y="200" as="sourcePoint" />
+                <mxPoint x="350" y="150" as="targetPoint" />
+            </mxGeometry>
+            </mxCell>
+            <mxCell id="users-admins-label" value="1:1" style="resizable=0;html=1;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="users-admins-rel">
+            <mxGeometry relative="1" as="geometry" />
+            </mxCell>
+
+            <!-- Customers to Accounts -->
+            <mxCell id="customers-accounts-rel" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="customers-table" target="accounts-table">
+            <mxGeometry width="50" height="50" relative="1" as="geometry">
+                <mxPoint x="450" y="450" as="sourcePoint" />
+                <mxPoint x="500" y="400" as="targetPoint" />
+            </mxGeometry>
+            </mxCell>
+            <mxCell id="customers-accounts-label" value="1:M" style="resizable=0;html=1;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="customers-accounts-rel">
+            <mxGeometry relative="1" as="geometry" />
+            </mxCell>
+
+            <!-- Customers to Loans -->
+            <mxCell id="customers-loans-rel" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="customers-table" target="loans-customer-id">
+            <mxGeometry width="50" height="50" relative="1" as="geometry">
+                <mxPoint x="600" y="300" as="sourcePoint" />
+                <mxPoint x="650" y="250" as="targetPoint" />
+            </mxGeometry>
+            </mxCell>
+            <mxCell id="customers-loans-label" value="1:M" style="resizable=0;html=1;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="customers-loans-rel">
+            <mxGeometry relative="1" as="geometry" />
+            </mxCell>
+
+            <!-- Customers to Credit Cards -->
+            <mxCell id="customers-credit-cards-rel" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="customers-table" target="credit-cards-customer-id">
+            <mxGeometry width="50" height="50" relative="1" as="geometry">
+                <mxPoint x="600" y="350" as="sourcePoint" />
+                <mxPoint x="650" y="300" as="targetPoint" />
+            </mxGeometry>
+            </mxCell>
+            <mxCell id="customers-credit-cards-label" value="1:M" style="resizable=0;html=1;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="customers-credit-cards-rel">
+            <mxGeometry relative="1" as="geometry" />
+            </mxCell>
+
+            <!-- Accounts to Transactions -->
+            <mxCell id="accounts-transactions-rel" value="" style="endArrow=none;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="accounts-customer-id" target="transactions-account-id">
+            <mxGeometry width="50" height="50" relative="1" as="geometry">
+                <mxPoint x="300" y="550" as="sourcePoint" />
+                <mxPoint x="350" y="500" as="targetPoint" />
+            </mxGeometry>
+            </mxCell>
+            <mxCell id="accounts-transactions-label" value="1:M" style="resizable=0;html=1;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="accounts-transactions-rel">
+            <mxGeometry relative="1" as="geometry" />
+            </mxCell>
+
+            <!-- Loan Types to Loans -->
+            <mxCell id="loan-types-loans-rel" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="loan-types-table" target="loans-type-id">
+            <mxGeometry width="50" height="50" relative="1" as="geometry">
+                <mxPoint x="1050" y="280" as="sourcePoint" />
+                <mxPoint x="1100" y="230" as="targetPoint" />
+            </mxGeometry>
+            </mxCell>
+            <mxCell id="loan-types-loans-label" value="1:M" style="resizable=0;html=1;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="loan-types-loans-rel">
+            <mxGeometry relative="1" as="geometry" />
+            </mxCell>
+
+            <!-- Title and Legend -->
+            <mxCell id="title" value="NX Finance E-Banking System - Entity Relationship Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+            <mxGeometry x="500" y="10" width="400" height="30" as="geometry" />
+            </mxCell>
+
+            <!-- Legend -->
+            <mxCell id="legend-box" value="" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=center;fontSize=14;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+            <mxGeometry x="1200" y="50" width="200" height="200" as="geometry" />
+            </mxCell>
+            <mxCell id="legend-title" value="Legend" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;fontStyle=1" vertex="1" parent="legend-box">
+            <mxGeometry y="30" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="legend-pk" value="🔑 Primary Key" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="legend-box">
+            <mxGeometry y="60" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="legend-fk" value="🔗 Foreign Key" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="legend-box">
+            <mxGeometry y="90" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="legend-rel" value="1:1 - One to One" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="legend-box">
+            <mxGeometry y="120" width="200" height="30" as="geometry" />
+            </mxCell>
+            <mxCell id="legend-rel2" value="1:M - One to Many" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="legend-box">
+            <mxGeometry y="150" width="200" height="30" as="geometry" />
+            </mxCell>
+
+        </root>
+        </mxGraphModel>
+    </diagram>
+    </mxfile>

@@ -174,6 +174,56 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// Login direct route (fallback endpoint)
+router.post('/login-direct', async (req, res) => {
+    try {
+        console.log('[DEBUG] Login-direct route called');
+        console.log('[DEBUG] Request headers:', JSON.stringify(req.headers));
+        console.log('[DEBUG] Request body:', req.body ? JSON.stringify(req.body) : '(no body)');
+        
+        if (!req.body || !req.body.email || !req.body.password) {
+            console.log('[DEBUG] Missing required login fields in direct endpoint');
+            return res.status(400).json({ 
+                error: 'Email and password are required',
+                fieldsReceived: req.body ? Object.keys(req.body) : []
+            });
+        }
+
+        const { email, password } = req.body;
+        console.log('[DEBUG] Direct login attempt for email:', email);
+        
+        const user = await User.findByEmailAndPassword(email, password);
+        
+        if (!user) {
+            console.log('[DEBUG] Direct login failed: invalid credentials for email:', email);
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        
+        console.log('[DEBUG] Direct login successful for user:', user.id, user.email, 'Role:', user.role);
+        
+        const token = jwt.sign(
+            { userId: user.id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+        
+        console.log('Login successful for user:', user.id, user.email, user.role);
+        
+        res.json({
+            token,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        console.error('Direct login error:', error);
+        res.status(500).json({ error: 'Server error: ' + error.message });
+    }
+});
+
 // Protected route example
 router.get('/profile', async (req, res) => {
     res.json({ message: 'Protected route' });

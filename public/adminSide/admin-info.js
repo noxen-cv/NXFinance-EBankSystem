@@ -21,13 +21,42 @@ document.addEventListener('DOMContentLoaded', function() {
                     showNotification('Profile image updated successfully!', 'success');
                 };
                 reader.readAsDataURL(this.files[0]);
-            }
-        });
+            }        });
     }
-    
+
     // Load admin profile data from API
     async function loadAdminProfile() {
+        // Only run on admin-info page
+        if (!window.location.pathname.includes('admin-info.html')) {
+            console.log('loadAdminProfile: Not on admin-info page, skipping...');
+            return;
+        }
+        
+        console.log('loadAdminProfile: Loading admin profile for admin-info page...');
+        
         try {
+            // TODO: Create /api/admin/profile endpoint on server
+            console.warn('loadAdminProfile: API endpoint /api/admin/profile not implemented yet');
+            
+            // For now, use mock data
+            const mockData = {
+                user: { username: 'Admin' },
+                firstName: 'Admin',
+                lastName: 'User'
+            };
+            
+            // Update admin name
+            const adminUsernameEl = document.getElementById('adminUsername');
+            const firstNameEl = document.getElementById('firstName');
+            const lastNameEl = document.getElementById('lastName');
+            
+            if (adminUsernameEl) adminUsernameEl.textContent = mockData.user?.username || 'Admin';
+            if (firstNameEl) firstNameEl.textContent = mockData.firstName || 'Loading...';
+            if (lastNameEl) lastNameEl.textContent = mockData.lastName || 'Loading...';
+            
+            return;
+            
+            /* Original API call - commented out until endpoint exists */
             const response = await fetch('/api/admin/profile', {
                 method: 'GET',
                 headers: {
@@ -86,9 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function getAuthToken() {
         return localStorage.getItem('authToken');
     }
-    
-    // Load saved profile data when page loads
-    loadAdminProfile();
+      // Load saved profile data when page loads - only if we're on admin-info page
+    if (window.location.pathname.includes('admin-info.html')) {
+        loadAdminProfile();
+    }
     
     // Load profile image from localStorage if available
     function loadProfileImage() {

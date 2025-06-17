@@ -32,37 +32,109 @@ app.use((req, res, next) => {
 // Configure database migrations
 const { runMigrations } = require('./config/migrations');
 
-// Middleware
+// Enhanced CORS configuration
 app.use(cors({
-    origin: true, // Allow all origins
+    origin: function (origin, callback) {
+        console.log('[CORS] Request origin:', origin);
+        
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) {
+            console.log('[CORS] No origin header, allowing request');
+            return callback(null, true);
+        }
+        
+        // List of allowed origins
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'http://localhost:5500',
+            'http://127.0.0.1:3000',
+            'http://127.0.0.1:5500',
+            'http://localhost:5501',
+            'http://127.0.0.1:5501'
+        ];
+        
+        if (allowedOrigins.includes(origin)) {
+            console.log('[CORS] Origin allowed from explicit list:', origin);
+            return callback(null, true);
+        }
+        
+        // For development, allow any localhost/127.0.0.1 origin
+        if (origin.match(/^https?:\/\/(localhost|127\.0\.0\.1):\d+$/)) {
+            console.log('[CORS] Origin allowed from regex match:', origin);
+            return callback(null, true);
+        }
+        
+        console.log('[CORS] Origin NOT allowed:', origin);
+        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     credentials: true,
     preflightContinue: false,
-    optionsSuccessStatus: 204
+    optionsSuccessStatus: 200
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Special CORS handling for registration and login endpoints
-app.options('/api/auth/register', cors({ 
-    origin: true,
-    methods: ['POST'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// Custom CORS fix middleware to override any wildcard headers
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    
+    // Only apply for requests with credentials
+    if (origin && req.headers['access-control-request-method'] !== undefined || 
+        (req.method !== 'OPTIONS' && req.headers.origin)) {
+        
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'http://localhost:5500',
+            'http://127.0.0.1:3000',
+            'http://127.0.0.1:5500',
+            'http://localhost:5501',
+            'http://127.0.0.1:5501'
+        ];
+        
+        if (allowedOrigins.includes(origin) || (origin && origin.match(/^https?:\/\/(localhost|127\.0\.0\.1):\d+$/))) {
+            console.log('[CUSTOM-CORS] Overriding CORS headers for origin:', origin);
+            res.header('Access-Control-Allow-Origin', origin);
+            res.header('Access-Control-Allow-Credentials', 'true');
+        }
+    }
+    
+    next();
+});
 
-app.options('/api/auth/register-direct', cors({ 
-    origin: true,
-    methods: ['POST'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// Additional OPTIONS handling for preflight requests
+app.options('*', (req, res) => {
+    const origin = req.headers.origin;
+    console.log('[OPTIONS] Preflight request from origin:', origin);
+    
+    // List of allowed origins (same as in main CORS config)
+    const allowedOrigins = [
+        'http://localhost:3000',
+        'http://localhost:5500',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:5500',
+        'http://localhost:5501',
+        'http://127.0.0.1:5501'
+    ];
+    
+    // Check if origin is allowed
+    if (allowedOrigins.includes(origin) || (origin && origin.match(/^https?:\/\/(localhost|127\.0\.0\.1):\d+$/))) {
+        console.log('[OPTIONS] Setting Access-Control-Allow-Origin to:', origin);
+        res.header('Access-Control-Allow-Origin', origin);
+    } else {
+        console.log('[OPTIONS] Origin not allowed, not setting CORS header');
+    }
+    
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.sendStatus(200);
+});
 
-app.options('/api/auth/login-direct', cors({ 
-    origin: true,
-    methods: ['POST'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// Body parser middleware for form data
 
 app.use(session({
     secret: process.env.JWT_SECRET,
@@ -90,31 +162,7 @@ const initializeDatabase = async () => {
     }
 };
 
-// Direct registration and login handlers (must come before router mounting)
-const { handleRegistration } = require('./direct-register');
-const { handleLogin } = require('./direct-login');
-
-// Define direct handler routes with explicit CORS handling
-app.post('/api/auth/register', cors(), handleRegistration);
-app.post('/api/auth/register-direct', cors(), handleRegistration); 
-app.post('/api/auth/login', cors(), handleLogin);
-app.post('/api/auth/login-direct', cors(), handleLogin);
-
-// Handle OPTIONS preflight requests for these endpoints
-app.options('/api/auth/login', cors());
-app.options('/api/auth/login-direct', cors());
-
-// Special diagnostic endpoint
-app.get('/api/auth/test', (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'API connection is working',
-        timestamp: new Date().toISOString(),
-        server: 'NXFinance API'
-    });
-});
-
-// API Routes (excluding registration which is handled above)
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/admin', adminRoutes);

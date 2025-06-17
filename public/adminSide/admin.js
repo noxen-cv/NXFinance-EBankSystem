@@ -62,17 +62,19 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!dashboardContainer.classList.contains('sidebar-closed')) {
                 dashboardContainer.classList.add('sidebar-open');
             }
-        }
-    });
+        }    });
 
-    // Initialize the loan progress chart
-    const ctx = document.getElementById('loanProgressChart').getContext('2d');
-    const loanProgressChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [0, 100],
-                backgroundColor: [
+    // Initialize the loan progress chart - declare variable outside if block
+    let loanProgressChart = null;
+    const loanProgressCanvas = document.getElementById('loanProgressChart');
+    if (loanProgressCanvas) {
+        const ctx = loanProgressCanvas.getContext('2d');
+        loanProgressChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [0, 100],
+                    backgroundColor: [
                     '#0088cc',
                     '#f5f5f5'
                 ],
@@ -91,9 +93,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 tooltip: {
                     enabled: true
                 }
-            }
-        }
+            }        }
     });
+    }
 
     // Initialize data arrays
     let loanData = [];
@@ -161,16 +163,24 @@ document.addEventListener('DOMContentLoaded', function() {
             showErrorMessage('Failed to load dashboard data. Please try again later.');
         }
     }
-    
-    // Update loan progress chart
+      // Update loan progress chart
     function updateLoanProgress(percentage) {
-        // Update chart
-        loanProgressChart.data.datasets[0].data = [percentage, 100 - percentage];
-        loanProgressChart.update();
+        // Update chart only if it exists
+        if (loanProgressChart) {
+            loanProgressChart.data.datasets[0].data = [percentage, 100 - percentage];
+            loanProgressChart.update();
+        }
         
-        // Update text
-        document.getElementById('loanHealthPercentage').textContent = `${percentage}%`;
-        document.getElementById('loanHealthDetail').textContent = `*${percentage}% out of 100%`;
+        // Update text elements if they exist
+        const percentageEl = document.getElementById('loanHealthPercentage');
+        if (percentageEl) {
+            percentageEl.textContent = `${percentage}%`;
+        }
+        
+        const detailEl = document.getElementById('loanHealthDetail');
+        if (detailEl) {
+            detailEl.textContent = `*${percentage}% out of 100%`;
+        }
     }
     
     // Helper function to get auth token from localStorage

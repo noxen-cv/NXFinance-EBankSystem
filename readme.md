@@ -43,8 +43,8 @@ NX Finance is a comprehensive prototype e-banking system featuring both customer
 ```
 NXFinance-EBankSystem/
 │
-├── public/                 # Frontend files
-│   ├── index.html         # Landing page
+├── index.html             # Main landing page (moved to root)
+├── public/                # Frontend files
 │   ├── login.html         # Customer login
 │   ├── register.html      # Customer registration
 │   ├── admin.html         # Admin dashboard
@@ -54,7 +54,7 @@ NXFinance-EBankSystem/
 │   ├── Assets/            # Images and logos
 │   └── js/                # Shared JavaScript utilities
 │
-├── server/                 # Backend application
+├── server/                # Backend application
 │   ├── server.js          # Main server file
 │   ├── config/            # Database and migration configs
 │   ├── middleware/        # Express middlewares
@@ -65,9 +65,12 @@ NXFinance-EBankSystem/
 │   ├── database-schema-documentation.md
 │   ├── technical-implementation.md
 │   ├── project_status.md
+│   ├── new-features-roadmap.md
 │   └── database/          # ERD and database docs
 │
-└── src/                   # Additional source files
+└── src/                   # CSS and JavaScript components
+    ├── styles.css         # Main stylesheet
+    └── components/        # Reusable UI components
 ```
 
 ## 🗄️ Database Schema
@@ -171,6 +174,7 @@ See `doc/project_status.md` for detailed development progress and implementation
 - **Database Schema**: `doc/database-schema-documentation.md`
 - **Technical Implementation**: `doc/technical-implementation.md`
 - **Project Status**: `doc/project_status.md`
+- **New Features Roadmap**: `doc/new-features-roadmap.md`
 - **ERD Diagrams**: `doc/database/`
 
 ## 🤝 Contributing

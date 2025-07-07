@@ -228,9 +228,21 @@ app.use('/Assets', express.static(path.join(__dirname, '../public/Assets')));
 app.use('/js', express.static(path.join(__dirname, '../public/js')));
 app.use('/css', express.static(path.join(__dirname, '../public/css')));
 
-// Serve main public pages
+// Serve src folder for CSS and JS components
+app.use('/src', express.static(path.join(__dirname, '../src')));
+
+// Serve public folder for HTML pages and assets
+app.use('/public', express.static(path.join(__dirname, '../public')));
+
+// Serve root directory (for index.html in root)
+app.use('/', express.static(path.join(__dirname, '../'), { 
+    index: ['index.html'],
+    extensions: ['html', 'htm']
+}));
+
+// Fallback to serve public pages without /public prefix for compatibility
 app.use('/', express.static(path.join(__dirname, '../public'), { 
-    index: ['index.html', 'login.html'],
+    index: false,
     extensions: ['html', 'htm']
 }));
 

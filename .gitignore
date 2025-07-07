@@ -1,1 +1,9 @@
+*/doc
+*/docs
+
+.txt
+
+*.log
+
+*/node_modules
 
